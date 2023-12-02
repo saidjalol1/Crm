@@ -1,0 +1,9 @@
+asgiref==3.7.2
+crispy-bootstrap4==2023.1
+Django==4.2.7
+django-crispy-forms==2.1
+django-resized==1.0.2
+Pillow==10.1.0
+psycopg2==2.9.9
+sqlparse==0.4.4
+tzdata==2023.3
