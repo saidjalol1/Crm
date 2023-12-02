@@ -1,0 +1,132 @@
+{% extends 'wrapper.html' %}
+{% load static %}
+{% block style %}<link rel="stylesheet" type="text/css" href="vendor/star-rating/star-rating-svg.css">{% endblock style %}
+{% block title %}{{ object.name }}{% endblock title %}
+{% block content %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-xl-3 col-lg-6  col-md-6 col-xxl-5 ">
+                                        <!-- Tab panes -->
+                                        <div class="tab-content">
+                                            <div role="tabpanel" class="tab-pane fade show active" id="first" style="width: 100%;">
+                                                <img class="img-fluid" src="{{ object.image.url }}" alt="" style="width: 100%;">
+                                            </div>
+                                        </div>
+                                        <div class="tab-slide-content new-arrival-product mb-4 mb-xl-0">
+                                            <!-- Nav tabs -->
+                                            <ul class="nav slide-item-list mt-3" role="tablist">
+                                                <li role="presentation" class="show">
+                                                    <a href="#first" role="tab" data-toggle="tab">
+                                                        <img class="img-fluid" src="images/tab/1.jpg" alt="" width="50">
+                                                    </a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="#second" role="tab" data-toggle="tab"><img class="img-fluid" src="images/tab/2.jpg" alt="" width="50"></a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="#third" role="tab" data-toggle="tab"><img class="img-fluid" src="images/tab/3.jpg" alt="" width="50"></a>
+                                                </li>
+												<li role="presentation">
+                                                    <a href="#for" role="tab" data-toggle="tab"><img class="img-fluid" src="images/tab/4.jpg" alt="" width="50"></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!--Tab slider End-->
+                                    <div class="col-xl-9 col-lg-6  col-md-6 col-xxl-7 col-sm-12">
+                                        <div class="product-detail-content">
+                                            <!--Product details-->
+                                            <div class="new-arrival-content pr">
+                                                <h4>{{ object.name }}</h4>
+												<div class="d-table mb-2">
+													<p class="price float-left d-block">Narxi: {{ object.price }} so'm</p>
+                                                </div>
+                                                <p>Omborda:<span class="item"> {{ object.amount }}ta <i class="fa fa-shopping-basket"></i></span></p>
+                                                <p>Brand: <span class="item">{{ object.category.name }}</span></p>
+                                                <p>Chegirma: {{ object.discount }}%</p>
+                                                <p class="text-content">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
+                                                    If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing.</p>
+                                                <!--Quantity start-->
+											<form action="{% url 'products:add_to_card' object.id %}" method="POST">
+                                                {% csrf_token %}
+                                                <div class="col-2 px-0">
+													<input type="number" name="quantity" class="form-control input-btn input-number" value="1">
+												</div>
+                                                <!--Quanatity End-->
+                                                <div class="shopping-cart mt-3">
+                                                    <button class="btn btn-primary btn-lg" type="submit"><i
+                                                            class="fa fa-shopping-basket mr-2"></i>Add
+                                                        to cart
+                                                    </button>
+                                                </div>
+                                            </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					<!-- review -->
+					<div class="modal fade" id="reviewModal">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Review</h5>
+									<button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form>
+										<div class="text-center mb-4">
+											<img class="img-fluid rounded" width="78" src="./images/avatar/1.jpg" alt="DexignZone">
+										</div>
+										<div class="form-group">
+											<div class="rating-widget mb-4 text-center">
+												<!-- Rating Stars Box -->
+												<div class="rating-stars">
+													<ul id="stars">
+														<li class="star" title="Poor" data-value="1">
+															<i class="fa fa-star fa-fw"></i>
+														</li>
+														<li class="star" title="Fair" data-value="2">
+															<i class="fa fa-star fa-fw"></i>
+														</li>
+														<li class="star" title="Good" data-value="3">
+															<i class="fa fa-star fa-fw"></i>
+														</li>
+														<li class="star" title="Excellent" data-value="4">
+															<i class="fa fa-star fa-fw"></i>
+														</li>
+														<li class="star" title="WOW!!!" data-value="5">
+															<i class="fa fa-star fa-fw"></i>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<textarea class="form-control" placeholder="Comment" rows="5"></textarea>
+										</div>
+										<button class="btn btn-success btn-block">RATE</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+                </div>
+{% endblock content %}
+{% block scripts %}
+	<script src="./vendor/star-rating/jquery.star-rating-svg.js"></script>
+{% endblock scripts%}

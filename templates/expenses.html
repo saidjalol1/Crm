@@ -1,0 +1,64 @@
+{% extends 'wrapper.html' %}
+{% block title %}Chiqimlar{% endblock title %}
+{% block content %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form action="" method="GET" class="d-flex justify-content-between align-items-center mb-2 ml-2">
+                            {% csrf_token %}
+                            <div class="d-flex">
+                                <input type="text" name="by_status" id="by_status_id" class="form-control" placeholder="Nomi bo'yicha">
+                                <input  name="by_date" id="by_date_id" placeholder="Sanasi bo'yicha" class="form-control mx-2" type="date">
+                            </div>
+                           <div>
+                            <button type="submit" name="filter" class="btn btn-outline-success mx-2">Filter</button>
+                           </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-lg-12'>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Chiqimlar</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table header-border table-hover verticle-middle">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Chiqim nomi</th>
+                                                <th scope="col">Miqdori</th>
+                                                <th>Muddati</th>
+                                                <th scope="col">sanasi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in objects %}
+                                            <tr>
+                                                <th>{{ i.id }}</th>
+                                                <td>{{ i.name }}</td>
+                                                <td>{{ i.amount }}ta</td>
+                                                {% if i.start_date and i.end_date %}
+                                                    <td>
+                                                        {{ i.start_date }}-{{ i.end_date }}
+                                                    </td>
+                                                {% endif %}
+                                                <td>
+                                                   {{ i.date_added }}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{% endblock content %}
+
+
+
+
+

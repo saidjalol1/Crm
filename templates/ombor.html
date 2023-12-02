@@ -1,0 +1,109 @@
+{% extends 'wrapper.html' %}
+{% block title %}Ombor{% endblock title %}
+{% block content %}
+                <div class="row">
+                    <div class="card col-12">
+                        <div class="card-header">Ko'rsatmalar</div>
+                        <div class="card-body">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table header-border table-hover verticle-middle">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Rang</th>
+                                                <th scope="col">Miqdori</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>1</th>
+                                                <td>
+                                                    <div class="badge badge-primary light" style="background-color: #ff0070;color: white;">0.0% - 25%</div>
+                                                </td>
+                                                <td>Mahsulot yo'q</td>
+                                            </tr>
+                                            <tr>
+                                                <th>2</th>
+                                                <td>
+                                                    <div class="badge badge-primary light" style="background-color: #ff653b;color: white;">25% - 50%</div>
+                                                </td>
+                                                <td>Mahsulot oz</td>
+                                            </tr>
+                                            <tr>
+                                                <th>3</th>
+                                                <td>
+                                                    <div class="badge badge-primary light" style="background-color: #ffe300;color: white;">50% - 75%</div>
+                                                </td>
+                                                <td>Mahsulot oz qolayapti</td>
+                                            </tr>
+                                            <tr>
+                                                <th>4</th>
+                                                <td>
+                                                    <div class="badge badge-primary light" style="background-color: #5cd430;color: white;">75% - 100%</div>
+                                                </td>
+                                                <td>Mahsulot bor</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-lg-12'>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Ombor</h4>
+                                <h4>Jami : {{ products.overall_products_number }}ta</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table header-border table-hover verticle-middle">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Mahsulotlar</th>
+                                                <th scope="col">Miqdori</th>
+                                                <th scope="col">Foizda</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in products.products.all %}
+                                            <tr>
+                                                <th>{{ i.id }}</th>
+                                                <td>{{ i.name }}</td>
+                                                <td>{{ i.amount }}ta</td>
+                                                <!-- <td> 
+                                                    <div class="progress bgl-primary">
+                                                        <div class="progress-bar" style="width: 50%;" role="progressbar"><span class="sr-only">70% Complete</span>
+                                                        </div>
+                                                    </div>
+                                                </td> -->
+                                                <td>
+                                                    {% if i.products_status_in_storage >= 0 and i.products_status_in_storage < 25  %}
+                                                    <div class="badge badge-primary light" style="background-color: #ff0070;color: white;">{{ i.products_status_in_storage }}%</div>
+                                                    {% elif i.products_status_in_storage > 25 and i.products_status_in_storage < 50 %}
+                                                    <div class="badge badge-primary light" style="background-color: #ff653b;color: white;">{{ i.products_status_in_storage }}%</div>
+                                                    {% elif i.products_status_in_storage  > 50 and i.products_status_in_storage < 75 %}
+                                                    <div class="badge badge-primary light" style="background-color: #ffe300;color: white;">{{ i.products_status_in_storage }}%</div>
+                                                    {% else %}
+                                                    <div class="badge badge-primary light" style="background-color: #5cd430;color: white;">{{ i.products_status_in_storage }}%</div>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{% endblock content %}
+
+
+
+
+

@@ -1,0 +1,232 @@
+{% extends 'wrapper.html' %}
+{% load static %}
+{% block title %}Statistikalar{% endblock title %}
+{% block content %}
+{% load crispy_forms_tags %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="row">
+	<div class="col-xl-12 col-xxl-12">
+		<div class="mb-4 d-flex justify-content-end">
+			<button type="button" class="btn btn-outline-warning mx-2" data-toggle="modal" data-target="#exampleModal">Harajat qo'shish</button>
+			<button type="button" class="btn btn-outline-warning mx-2" data-toggle="modal" data-target="#add_seller">Sotuvchi Qo'shish</button>
+		</div>
+		<div class="row">
+				<div class="col-lg-6 col-sm-6">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Sotilgan tovarlar oylik reyting</h4>
+						</div>
+						<div class="card-body">
+							<canvas id="monthlyChart"></canvas>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-sm-6">
+					<div class="card">
+						<a href="{% url 'main:expenses' %}">
+							<div class="card-header">
+								<h4 class="card-title">Chiqimlar</h4>
+							</div>
+						</a>
+						<div class="card-body">
+							<canvas id="expenses"></canvas>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-12 col-sm-6">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Sotuvchilar Reytingi</h4>
+						</div>
+						<div class="card-body">
+							<canvas id="workersChart"></canvas>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="col-lg-12 col-sm-6">
+				<div class="card">
+					<div class="card-header"><h4>Sotuvchilar</h4></div>
+					<div class="card-body">
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table header-border table-hover verticle-middle">
+									<thead>
+										<tr>
+											<th scope="col">ID</th>
+											<th scope="col">Ism Sharifi</th>
+											<th scope="col">Telefon</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for i in users %}
+										{% if i.is_staff == True %}
+										<tr>
+											<th>{{ i.id }}</th>
+											<td>
+												{{ i.username }}
+											</td>
+											<td>{{ i.phone_number }}</td>
+										</tr>
+										{% endif %}
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+	
+
+
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+	  <form method="POST">
+		{% csrf_token %}
+	  <div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Chiqim Qo'shish</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+	  </div>
+	  <div class="modal-body">
+		{{ expensesForm }}
+	  </div>
+	  <div class="modal-footer">
+		<button type="submit" class="btn btn-primary" name="add_expense">Buyurtma berish</button>
+	  </div>
+	</form>
+	  </div>
+	</div>
+</div>
+<div class="modal fade" id="add_seller" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+	  <form method="POST">
+		{% csrf_token %}
+	  <div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Sotuvchi Qo'shish</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+	  </div>
+	  <div class="modal-body">
+			{{ sellerForm|crispy }}
+	  </div>
+	  <div class="modal-footer">
+		<button type="submit" class="btn btn-primary" name="add_seller">Qo'shish</button>
+	  </div>
+	</form>
+	  </div>
+	</div>
+</div>
+{% endblock content %}
+{% block scripts %}
+<script>
+	// JavaScript code to render the chart using the data passed from the view
+	var ctx = document.getElementById('monthlyChart').getContext('2d');
+	var data = JSON.parse('{{ data|safe }}');
+
+	var labels = data.map(function(item) {
+		return item.month;
+	});
+
+	var quantities = data.map(function(item) {
+		return item.total_quantity;
+	});
+
+	var chart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: "Oy bo'yicha",
+				backgroundColor: 'rgba(75, 192, 192, 0.2)',
+				borderColor: 'rgba(75, 192, 192, 1)',
+				borderWidth: 1,
+				data: quantities,
+			}]
+		},
+		options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+	});
+</script>
+<script>
+	// JavaScript code to render the chart using the data passed from the view
+	var ctx = document.getElementById('expenses').getContext('2d');
+	var data = JSON.parse('{{ expenses|safe }}');
+
+	var labels = data.map(function(item) {
+		return item.month;
+	});
+
+	var quantities = data.map(function(item) {
+		return item.total_amount;
+	});
+
+	var chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: "Oy bo'yicha",
+				backgroundColor: 'rgba(75, 192, 192, 0.2)',
+				borderColor: 'rgba(75, 192, 192, 1)',
+				borderWidth: 1,
+				data: quantities,
+			}]
+		},
+		options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+	});
+</script>
+<script>
+    var ctx = document.getElementById('workersChart').getContext('2d');
+    var data = JSON.parse('{{ workers|safe }}');
+
+    var labels = Array.from(new Set(data.map(item => item.month))); 
+    var sellers = Array.from(new Set(data.map(item => item.seller))); 
+    console.log(sellers);
+
+    var datasets = sellers.map(seller => {
+        return {
+            label:  seller,
+            data: labels.map(month => {
+                var entry = data.find(item => item.month === month && item.seller === seller);
+                return entry ? entry.total_quantity : 0;
+            }),
+            backgroundColor: getRandomColor(),
+        };
+    });
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: datasets,
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+</script>
+{% endblock scripts %}

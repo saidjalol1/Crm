@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock title %}</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon.png' %}">
+	<link rel="stylesheet" href="{% static 'vendor/chartist/css/chartist.min.css' %}">
+    <link href="{% static 'vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}" rel="stylesheet">
+	<link href="{% static 'vendor/owl-carousel/owl.carousel.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    {% block style %}{% endblock style %}
+</head>
+<body>
+       <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+     <!--**********************************
+        Main wrapper start
+    ***********************************-->
+
+    <div id="main-wrapper">
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <div class="nav-control">
+                <div class="hamburger">
+                    <span class="line"></span><span class="line"></span><span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+        	<!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">
+            
+            <div class="header-content">
+                <nav class="navbar navbar-expand d-flex justify-content-center">
+                    
+                    <div class="collapse navbar-collapse justify-content-between">
+                        <div class="header-left">
+                            <div class="dashboard_bar">
+								BillurSHop
+                            </div>
+                        </div>
+                        <ul class="navbar-nav header-right">
+							<li class="nav-item">
+								<form action="" method="GET">
+                                    {% csrf_token %}
+                                    <div class="input d-flex align-items-center form-control">
+                                        <div><input type="text" name="product" style="border: none;outline: none;padding: 4% 5%;" placeholder="search"></div>
+                                        <button name="search" type="submit" style="background-color: transparent;border: none; padding: 2% 2%;"><i class="flaticon-381-search-2" style="font-size: 20px;"></i></button>
+                                    </div>
+                                </form>
+							</li>
+                            <li class="nav-item dropdown notification_dropdown">
+                                <a class="nav-link  ai-icon  d-none d-lg-block d-sm-block d-md-block d-xs-block" href='{% url "products:wishlist" %}'>
+									<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                        <style>svg{fill:#045ffb}</style>
+                                        <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+                                    </svg>
+                                </a>
+                            </li>
+							<li class="nav-item dropdown notification_dropdown ">
+                                <a class="nav-link  ai-icon  d-none d-lg-block d-sm-block d-md-block d-xs-block" href='{% url "products:cart" %}'>
+									<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
+                                        <style>svg{fill:#045ffb}</style>
+                                        <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+                                    </svg>
+									<div class="pulse-css"></div>
+                                </a>
+                            </li>			
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- <i class="flaticon-381-search-2"></i> -->
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+         <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="deznav">
+            <div class="deznav-scroll">
+				<ul class="metismenu" id="menu">
+                   
+                    <li>
+                        <a class="has-arrow ai-icon" aria-expanded="false">
+							<i class="flaticon-381-networking"></i>
+							<span class="nav-text">Menu</span>
+						</a>
+                        <ul aria-expanded="false">
+                            {% if user.is_staff %}
+                            <li><a href="{%  url 'main:storage' %}">Ombor</a></li>
+                            <li><a href="{% url 'statistic:statistics' %}">Statistikalar</a></li>
+							<li><a href="{% url 'products:product_list' %}">Barcha Tovarlar</a></li>
+							<li><a href="{%  url 'main:order_page' %}">Buyurtmalar</a></li>
+                            <li><a href="{%  url 'main:orders_status' %}">Buyurtmalar holati</a></li>
+                            <li><a href="{%  url 'main:staffs' %}">Ishchilar bo'limi</a></li>
+                            <li><a href="{% url 'products:logout' %}">Logout</a></li>
+                            {% else %}
+                            <li><a href="{% url 'products:product_list' %}">Barcha Tovarlar</a></li>
+                            <li><a href="{% url 'products:customer_order_page' %}">Mening buyurtmalarim</a></li>
+                            {% endif %}
+						</ul>
+                    </li>
+                <li class="nav-item dropdown notification_dropdown d-lg-none d-md-none">
+                    <a class="nav-link  ai-icon" href='{% url "products:wishlist" %}'>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                            <style>svg{fill:#045ffb}</style>
+                            <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+                        </svg>
+                    </a>
+                </li>
+                <li class="nav-item dropdown notification_dropdown d-lg-none d-md-none">
+                    <a class="nav-link  ai-icon" href='{% url "products:cart" %}'>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#045ffb}</style><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+                        <div class="pulse-css"></div>
+                    </a>
+                </li>
+                </ul>
+			</div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+			<div class="container-fluid">
+				{% block content %} {% endblock content %}
+			</div>
+		</div>
+
+          <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p>Copyright © Designed &amp; Developed by <a href="http://dexignzone.com/" target="_blank">DexignZone</a> 2020</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+    </div>
+
+       
+ <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="{% static 'vendor/global/global.min.js' %}"></script>
+	<script src="{% static 'vendor/bootstrap-select/dist/js/bootstrap-select.min.js' %}"></script>
+    <script src="{% static 'js/custom.min.js' %}"></script>
+	<script src="{% static 'js/deznav-init.js' %}"></script>
+    <script src="{% static 'vendor/highlightjs/highlight.pack.min.js' %}"></script>
+    <script src="{% static '/vendor/owl-carousel/owl.carousel.js' %}"></script>
+    <!-- Circle progress -->    
+    {% block scripts %} {% endblock scripts %}
+</body>
+</html>

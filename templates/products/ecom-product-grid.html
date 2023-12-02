@@ -1,0 +1,199 @@
+{% extends 'wrapper.html' %}
+{% load static %}
+{% block title %}Products{% endblock title %}
+{% block style %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+<script>
+    $(document).ready(function () {
+        $('.wishlist-toggle').click(function () {
+            var productId = $(this).data('product-id');
+
+            $.ajax({
+                url: '/wishlist/toggle/' + productId + '/',
+                type: 'POST',
+                dataType: 'json',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }, // Include CSRF token
+                success: function (data) {
+                    var wishlistToggle = $('.wishlist-toggle[data-product-id="' + productId + '"]');
+					var heartIcon = wishlistToggle.find('#wishlist-icon');
+                    if (data.is_added) {
+                        // wishlistToggle.css('color', 'red');
+						heartIcon.addClass('in_wishlist')
+						console.log(heartIcon);
+                    } else {
+                        // wishlistToggle.css('color', 'blue');
+						heartIcon.removeClass('in_wishlist')
+
+                    }
+                }
+            });
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+<style>
+	.icon{
+		color: blue;
+	}
+	.in_wishlist{
+		color: red;
+	}
+</style>
+{% endblock style %}
+{% block content %}
+{% load crispy_forms_tags %}
+                <div class="page-titles" >
+						<div class="d-flex justify-content-between align-items-center flex-wrap">
+							<div>
+								<form action="" method="GET" class="d-flex flex-wrap">
+									{% csrf_token %}
+									<button type="submit" class="btn btn-outline-success mx-2 my-2" name="billur_products">Billur mahsulotlari</button>
+									<button type="submit" class="btn btn-outline-success mx-2 my-2" name="extra-products">Qo'shimcha mahsulotlar</button>
+								</form>
+							</div>
+							{% if user.is_staff %}
+							<div>
+								<button type="button" class="btn btn-outline-secondary mt-2" name="new_product_add" data-toggle="modal" data-target="#exampleModal">Mahsuot qo'shish</button>
+							</div>
+							{% else %}
+							<div>
+								<button type="button"  data-target="#loginModal" data-toggle="modal" class="btn btn-outline-success">Log in</button>
+							</div>
+							{% endif %}
+						</div>
+                </div>
+                <div class="row">
+					{% for i in object_list %}
+					<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="new-arrival-product">
+									<a href="{% url 'products:product_detail' i.id %}">
+                                    <div class="new-arrivals-img-contnent" style="width: 100%;height: 300px;">
+                                        <img class="img-fluid" src="{{ i.image.url }}" alt="" style="width: 100%;height:100%;">
+                                    </div>
+                                    <div class="new-arrival-content mt-3">
+                                        <div>
+											<div class="d-flex justify-content-between align-items-center pr-3">
+												<h4>
+													<a>{{ i.name }}</a>
+													<span class="text-danger">{% if i.category.name == 'Billur' %}( Billur ){% else %}{% endif %}</span>
+												</h4>
+												<p class="px-2 py-2 wishlist-toggle"   style="cursor: pointer;" data-product-id="{{ i.id }}" name="wishlist">
+													<i id="wishlist-icon" class="fas fa-heart icon {% if i in wishlist_products.products.all %}in_wishlist{% endif %}" style="font-size: 20px;"></i>
+												</p>
+											</div>
+											<p>Omborda : {{ i.amount }}ta</p>
+										</div>
+										{% if i.old_price > 0 %}
+										<div class="badge badge-light text-danger"><strike>{{ i.old_price }} so'm</strike></div>
+										{% endif %}
+                                        <div class="mt-2" 
+											style="font-weight: 600;
+												color: #0B2A97;
+												font-size: 24px;
+												">
+												{{ i.price }}so'm
+										</div>
+                                    </div>
+									</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					{% endfor %}
+                </div>
+            </div>
+			<div class='d-flex justify-content-center align-items-center'>
+				<nav>
+					<ul class="pagination pagination-gutter">
+						{% if current_page.has_previous %}
+						<li class="page-item page-indicator">
+							<a class="page-link" href="?page=1">
+								<i class="la la-angle-left"></i>
+							</a>
+						</li>
+						{% endif %}
+						{% for page_number in paginator.page_range %}
+						<li class="page-item {% if page_number == current_page.number %} active {% endif %}">
+							<a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+						</li>
+						{% endfor %}
+						{% if current_page.has_next %}
+						<li class="page-item page-indicator">
+							<a class="page-link" href="?page={{ paginator.num_pages }}">
+								<i class="la la-angle-right"></i></a>
+						</li>
+						{% endif %}
+					</ul>
+				</nav>
+			</div>
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+				  <div class="modal-content">
+					<form action="" method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+					<div class="modal-header">
+					  <h5 class="modal-title" id="exampleModalLabel">Mahsulot Qo'shish</h5>
+					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+					<div class="modal-body">
+						
+					{{ product_form }}
+						
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-secondary" data-dismiss="modal">Yopish</button>
+					  <button type="submit" class="btn btn-outline-secondary" name="new_product_add">Saqlash</button>
+					</div>
+				</form>
+				  </div>
+				</div>
+			</div>
+			<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+				  <div class="modal-content">
+					<form action="" method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+					<div class="modal-header">
+					  <h5 class="modal-title" id="exampleModalLabel">Mahsulot Qo'shish</h5>
+					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+					<div class="modal-body">
+						
+					{{ login_form|crispy }}
+				
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-secondary" data-dismiss="modal">Yopish</button>
+					  <button type="submit" class="btn btn-outline-secondary" name="login">Login</button>
+					</div>
+				</form>
+				  </div>
+				</div>
+			</div>
+{% endblock content %}
+{% block scripts %}
+
+
+{% endblock scripts %}

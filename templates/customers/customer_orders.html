@@ -1,0 +1,57 @@
+{% extends 'wrapper.html' %}
+{% load static %}
+{% block title %}Zakazlar{% endblock title %}
+{% block content %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm mb-0 table-responsive-lg text-black">
+                                        <thead>
+                                            <tr>
+                                                <th class="align-middle">
+                                                    <div class="custom-control custom-checkbox ml-1">
+														<input type="checkbox" class="custom-control-input" id="checkAll">
+														<label class="custom-control-label" for="checkAll"></label>
+													</div>
+                                                </th>
+                                                <th class="align-middle">Buyurtma</th>
+                                                <th class="align-middle pr-7">Sana</th>
+                                                <th class="align-middle minw200">Adress</th>
+                                                <th class="align-middle text-right">Mo'ljal</th>
+                                                <th class="align-middle text-right">Amount</th>
+                                                <th class="no-sort"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="orders">
+											{% for i in orders %}
+                                            <tr class="btn-reveal-trigger">
+                                                <td class="py-2">
+                                                    <div class="custom-control custom-checkbox checkbox-success">
+														<input type="checkbox" class="custom-control-input" id="checkbox">
+														<label class="custom-control-label" for="checkbox"></label>
+													</div>
+                                                </td>
+                                                <td class="py-2">
+                                                    <a  href="{% url 'products:cutomer_order_detail' i.id %}">
+                                                        <strong>#{{ i.id }}</strong></a> by <strong>{{ i.customer_full_name }}</strong><br /><a href="mailto:ricky@example.com">{{ i.phone_number }}</a></td>
+                                                <td class="py-2">{{ i.date_added }}</td>
+                                                <td class="py-2">{{ i.address }}</td>
+                                                <td class="py-2">{{ i.target }}</td>
+                                                <td class="py-2 text-right"><span class="badge badge-success">{{ i.status }}<span
+                                                            class="ml-1 fa fa-check"></span></span>
+                                                </td>
+                                                <td class="py-2 text-right">{{ i.get_overall }}so'm
+                                                </td>
+                                            </tr>
+                                           	{% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{% endblock content %}
+           
