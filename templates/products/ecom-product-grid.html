@@ -61,18 +61,18 @@
                 <div class="page-titles" >
 						<div class="d-flex justify-content-between align-items-center flex-wrap">
 							<div>
-								<form action="" method="GET" class="d-flex flex-wrap">
+								<form action="" method="GET" class="d-flex">
 									{% csrf_token %}
-									<button type="submit" class="btn btn-outline-success mx-2 my-2" name="billur_products">Billur mahsulotlari</button>
-									<button type="submit" class="btn btn-outline-success mx-2 my-2" name="extra-products">Qo'shimcha mahsulotlar</button>
+									<button type="submit" class="btn btn-outline-success mx-2 my-2" name="billur_products">Billur tovarlar</button>
+									<button type="submit" class="btn btn-outline-success mx-2 my-2" name="extra-products">Boshqalar</button>
 								</form>
 							</div>
 							{% if user.is_staff %}
-							<div>
-								<button type="button" class="btn btn-outline-secondary mt-2" name="new_product_add" data-toggle="modal" data-target="#exampleModal">Mahsuot qo'shish</button>
+							<div class="d-none d-lg-block d-sm-block d-md-block">
+								<button type="button" class="btn btn-outline-secondary mt-2" name="new_product_add" data-toggle="modal" data-target="#exampleModal">Mahsulot qo'shish</button>
 							</div>
 							{% else %}
-							<div>
+							<div class="d-none d-lg-block d-sm-block d-md-block">
 								<button type="button"  data-target="#loginModal" data-toggle="modal" class="btn btn-outline-success">Log in</button>
 							</div>
 							{% endif %}
@@ -92,7 +92,7 @@
                                         <div>
 											<div class="d-flex justify-content-between align-items-center pr-3">
 												<h4>
-													<a>{{ i.name }}</a>
+													{{ i.name }}
 													<span class="text-danger">{% if i.category.name == 'Billur' %}( Billur ){% else %}{% endif %}</span>
 												</h4>
 												<p class="px-2 py-2 wishlist-toggle"   style="cursor: pointer;" data-product-id="{{ i.id }}" name="wishlist">
@@ -143,54 +143,6 @@
 						{% endif %}
 					</ul>
 				</nav>
-			</div>
-			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-				  <div class="modal-content">
-					<form action="" method="POST" enctype="multipart/form-data">
-						{% csrf_token %}
-					<div class="modal-header">
-					  <h5 class="modal-title" id="exampleModalLabel">Mahsulot Qo'shish</h5>
-					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					  </button>
-					</div>
-					<div class="modal-body">
-						
-					{{ product_form }}
-						
-					</div>
-					<div class="modal-footer">
-					  <button type="button" class="btn btn-secondary" data-dismiss="modal">Yopish</button>
-					  <button type="submit" class="btn btn-outline-secondary" name="new_product_add">Saqlash</button>
-					</div>
-				</form>
-				  </div>
-				</div>
-			</div>
-			<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-				  <div class="modal-content">
-					<form action="" method="POST" enctype="multipart/form-data">
-						{% csrf_token %}
-					<div class="modal-header">
-					  <h5 class="modal-title" id="exampleModalLabel">Mahsulot Qo'shish</h5>
-					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					  </button>
-					</div>
-					<div class="modal-body">
-						
-					{{ login_form|crispy }}
-				
-					</div>
-					<div class="modal-footer">
-					  <button type="button" class="btn btn-secondary" data-dismiss="modal">Yopish</button>
-					  <button type="submit" class="btn btn-outline-secondary" name="login">Login</button>
-					</div>
-				</form>
-				  </div>
-				</div>
 			</div>
 {% endblock content %}
 {% block scripts %}
