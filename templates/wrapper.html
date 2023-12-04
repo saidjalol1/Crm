@@ -15,6 +15,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     {% block style %}{% endblock style %}
 </head>
+<style>
+    btn1{
+        background-color: green;
+    }
+</style>
 <body>
     {% load crispy_forms_tags %}
        <!--*******************
@@ -105,30 +110,85 @@
         <div class="deznav">
             <div class="deznav-scroll">
 				<ul class="metismenu" id="menu">
-                   
                     <li>
                         {% if user.is_staff %}
-                        <a class="has-arrow ai-icon" aria-expanded="false">
-							<i class="flaticon-381-networking"></i>
-							<span class="nav-text">Menu</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="{%  url 'main:storage' %}">Ombor</a></li>
-                            <li><a href="{% url 'statistic:statistics' %}">Statistikalar</a></li>
-							<li><a href="{% url 'products:product_list' %}">Barcha Tovarlar</a></li>
-							<li><a href="{%  url 'main:order_page' %}">Buyurtmalar</a></li>
-                            <li><a href="{%  url 'main:orders_status' %}">Buyurtmalar holati</a></li>
-                            <li><a href="{%  url 'main:staffs' %}">Ishchilar bo'limi</a></li>
-                            <li class="d-lg-none">
-                                <a name="new_product_add" data-toggle="modal" data-target="#exampleModal">Mahsulot qo'shish</a>
-                            </li>
-                            <li><a href="{% url 'products:logout' %}">Logout</a></li>
-                            {% else %}
-                            <li class="d-lg-none">
-                                <a data-target="#loginModal" data-toggle="modal">Log in</a>
-                            </li>
+                        <a href="{% url 'main:storage' %}"  aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 640 512">
+                                <path d="M0 488V171.3c0-26.2 15.9-49.7 40.2-59.4L308.1 4.8c7.6-3.1 16.1-3.1 23.8 0L599.8 111.9c24.3 9.7 40.2 33.3 40.2 59.4V488c0 13.3-10.7 24-24 24H568c-13.3 0-24-10.7-24-24V224c0-17.7-14.3-32-32-32H128c-17.7 0-32 14.3-32 32V488c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24zm488 24l-336 0c-13.3 0-24-10.7-24-24V432H512l0 56c0 13.3-10.7 24-24 24zM128 400V336H512v64H128zm0-96V224H512l0 80H128z"/>
+                            </svg>
+                            <span class="nav-text">Ombor</span>
+                        </a>
                             {% endif %}
-						</ul>
+                    </li>
+                    <li>
+                        {% if user.is_staff %}
+                        <a href="{% url 'statistic:statistics' %}"  aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512">
+                                <path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/>
+                            </svg>
+                            <span class="nav-text" >Statistikalar</span>
+                        </a>
+                            {% endif %}
+                    </li>
+                    <li>
+                        {% if user.is_staff %}
+                        <a href="{%  url 'main:order_page' %}"  aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
+                                <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H289.9L247 53.1C233.5 39.6 215.2 32 196.1 32H64zM48 96c0-8.8 7.2-16 16-16H196.1c6.4 0 12.5 2.5 17 7l45.3 45.3c7.5 7.5 17.7 11.7 28.3 11.7H448c8.8 0 16 7.2 16 16v32H48V96zm0 144H464V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V240z"/>
+                            </svg>
+                            <span class="nav-text" >Buyurtmalar</span>
+                        </a>
+                            {% endif %}
+                    </li>
+                    <li>
+                        {% if user.is_staff %}
+                        <a href="{%  url 'main:orders_status' %}"  aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512">
+                                <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                            </svg>
+                            <span class="nav-text" >Buyurtmalar holati</span>
+                        </a>
+                            {% endif %}
+                    </li>
+                    <li>
+                        {% if user.is_staff %}
+                        <a href="{% url 'products:product_list' %}"  aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512">
+                                <path d="M384 96V224H256V96H384zm0 192V416H256V288H384zM192 224H64V96H192V224zM64 288H192V416H64V288zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/>
+                            </svg>
+                            <span class="nav-text" >Barcha Tovarlar</span>
+                        </a>
+                            {% endif %}
+                    </li>
+                    <li>
+                        {% if user.is_staff %}
+                        <a href="{%  url 'main:staffs' %}"  aria-expanded="false">
+                            <i class="flaticon-381-networking"></i>
+                            <span class="nav-text">Ishchilar bo'limi</span>
+                        </a>
+                            {% endif %}
+                    </li>
+                    <li>
+                        {% if user.is_staff %}
+                        <a href="{% url 'products:logout' %}"  aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
+                                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/>
+                            </svg>
+                            <span class="nav-text">Logout</span>
+                        </a>
+                            {% endif %}
+                    </li>
+                    <li>
+                       <a href="{% url 'products:logout' %}"  aria-expanded="false">
+                        <form action="" method="GET" class="w-100 px-2">
+                        
+                            <button type="submit" id="btn1" class="btn btn-outline-success w-100" name="billur_products">Billur tovarlar</button>
+                            <button type="submit" id="btn2" class="btn btn-outline-success w-100 mt-2" name="extra-products">Boshqalar</button>
+                        </form>
+                        </a>
+                    </li>
+                    <li class="d-lg-none">
+                        <a data-target="#loginModal" data-toggle="modal">Log in</a>
                     </li>
                 <li class="nav-item dropdown notification_dropdown d-lg-none d-md-none">
                     <a class="nav-link  ai-icon d-flex align-items-center" href='{% url "products:wishlist" %}'>
@@ -232,5 +292,15 @@
     <script src="{% static '/vendor/owl-carousel/owl.carousel.js' %}"></script>
     <!-- Circle progress -->    
     {% block scripts %} {% endblock scripts %}
+    <script>
+        let btn1 = document.getElementById('btn1');
+        let btn2 = document.getElementById('btn2');
+        let title = document.getElementById('title')
+        let hamburger = document.querySelector('.nav-header');
+        hamburger.addEventListener('click', evt => {
+            btn1.classList.toggle("d-none");
+            btn2.classList.toggle("d-none");
+        });
+    </script>
 </body>
 </html>

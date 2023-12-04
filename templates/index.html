@@ -11,10 +11,54 @@
 			<button type="button" class="btn btn-outline-warning mx-2" data-toggle="modal" data-target="#add_seller">Sotuvchi Qo'shish</button>
 		</div>
 		<div class="row">
+			<div class="col-lg-6 col-sm-6">
+				<div class="card">
+					<div class="card-header">
+						<h4>Shu oydagi savdo</h4>
+					</div>
+					<div class="card-body">
+						<h2>{{ current_month_sale }} so'm<h2>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-sm-6">
+				<div class="card">
+					<div class="card-header">
+						<h4>Eng ko'p Sotilgan tovar</h4>
+					</div>
+					<div class="card-body">
+						{% for entry in most_sold_current_month %}
+    						<h2> {{ entry.most_sold_product }}</h2>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-sm-6">
+				<div class="card">
+					<div class="card-header">
+						<h4>Eng ko'p savdo qilgan Sotuvchi</h4>
+					</div>
+					<div class="card-body">
+						<h2>{{ admin_best }}</h2>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-sm-6">
+				<div class="card">
+					<div class="card-header">
+						<h4>shu oydagi chiqim</h4>
+					</div>
+					<div class="card-body">
+						<h2>{{ current_month_expense }} so'm<h2></h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
 				<div class="col-lg-6 col-sm-6">
 					<div class="card">
 						<div class="card-header">
-							<h4 class="card-title">Sotilgan tovarlar oylik reyting</h4>
+							<h5 class="card-title">Sotilgan tovarlar oylik summalari</h5>
 						</div>
 						<div class="card-body">
 							<canvas id="monthlyChart"></canvas>
@@ -131,11 +175,10 @@
 	// JavaScript code to render the chart using the data passed from the view
 	var ctx = document.getElementById('monthlyChart').getContext('2d');
 	var data = JSON.parse('{{ data|safe }}');
-
 	var labels = data.map(function(item) {
 		return item.month;
 	});
-
+	console.log(data);
 	var quantities = data.map(function(item) {
 		return item.total_quantity;
 	});

@@ -1,3 +1,6 @@
+import datetime
+from datetime import datetime
+from datetime import timedelta
 from django.shortcuts import render, redirect
 from django.db.models import Sum, F
 from django.db.models.functions import TruncMonth
@@ -12,6 +15,9 @@ from django.db.models import Count
 from .forms import ExpensesForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Max
+from django.db.models import Subquery, OuterRef
+current_month = datetime.now()
 
 
 class StatisticsView(View):
@@ -58,6 +64,33 @@ class StatisticsView(View):
             ]
         except Orders.DoesNotExist:
             print('error')
+        # most_sold =  Orders.objects.filter(status='Jonatildi').annotate(
+        #                                                         month=TruncMonth('date_added')
+        #                                                                 ).values('month').annotate(
+        #                                                                     total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
+        #                                                             order_count=Count('id'),
+        #                                                         most_sold_product=Max('order_items__products__name')
+        #                                                                 ).order_by('month')
+        most_sold_current_month = Orders.objects.filter(
+                                            status='Jonatildi',
+                                                date_added__month=current_month.month,
+                                                date_added__year=current_month.year,
+                                                    ).annotate(
+                                                        month=TruncMonth('date_added')
+                                                            ).values('month').annotate(
+                                                                total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
+                                                            order_count=Count('id'),
+                                                        most_sold_product=Max('order_items__products__name')
+                                                    ).order_by('month')
+        most_sold_admin_current_month = Orders.objects.filter(
+                                            status='Jonatildi',
+                                            date_added__month=current_month.month,
+                                            date_added__year=current_month.year
+                                            ).values('received_admin').annotate(
+                                            total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
+                                            order_count=Count('id')
+                                            ).order_by('-total_quantity').first()
+        
 
         data_json = json.dumps(data_list, cls=DjangoJSONEncoder)
         expenses_json = json.dumps(expenses_list, cls=DjangoJSONEncoder)
@@ -68,6 +101,13 @@ class StatisticsView(View):
         kwargs['expensesForm'] = ExpensesForm()
         kwargs['sellerForm'] = UserCreationForm()
         kwargs['users'] = User.objects.filter()
+        kwargs['current_month_sale'] = sum(i.get_overall() for i in Orders.objects.filter(date_added__month=current_month.month))
+        kwargs['current_month_expense'] = sum(i.amount for i in Expenses.objects.filter(date_added__month=current_month.month))
+        kwargs['most_sold_current_month'] = most_sold_current_month
+        kwargs['admin_best'] =  User.objects.get(id=most_sold_admin_current_month['received_admin'])
+        # print(kwargs['most_sold'])
+        # print(current_month.month)
+
         return kwargs
 
 
