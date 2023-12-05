@@ -46,6 +46,8 @@ class Product(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
     tag = models.ForeignKey(ProductTag, on_delete=models.CASCADE, related_name='products', blank=True, null=True)
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE, related_name='products', blank=True, null=True)
+    body_price = models.IntegerField(default=0)
+    net_profit = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['id']

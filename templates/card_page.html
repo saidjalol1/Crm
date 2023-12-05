@@ -17,41 +17,40 @@
                           <img src="{{ i.product.image.url }}" class="img-fluid rounded-3" alt="{{ i.product.name }}" style="width: 100%;height: 100%;">
                         </div>
                         <div class="col-md-3 col-lg-3 col-xl-3">
-                          <p class="lead fw-normal mb-2">{{ i.product.name }}</p>
-                          <p><span class="text-muted">Chegirma: </span>{{ i.product.discount }}%</p>
-                          <p><span class="text-muted">Donasi: </span>{{ i.product.price }} so'm</p>
+                          <h4 class="mb-2" style="font-size: 25px;">{{ i.product.name }}</h4>
+                          <p style="font-size: 20px;color: black;"><span  style="font-size: 22px;color: black;">Chegirma: </span>{{ i.product.discount }}%</p>
+                          <p style="font-size: 20px;color: black;"><span  style="font-size: 22px;color: black;">Donasi: </span>{{ i.product.price }} so'm</p>
                         </div>
                         <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                           <form action="" method="POST" class="d-flex">
                             {% csrf_token %}
                             <input type="text" name="product" value="{{ i.product.id }}" style="display: none;">
-                            <input id="form1" min="0" name="quantity" value="{{ i.quantity }}" type="number" class="form-control form-control-sm my-2 mx-2" />
-                            <button class="btn btn-link btn-success text-light  px-2  my-2 mx-2" name="add_quantity">save</button>
+                            <input id="form1" min="0" name="quantity" value="{{ i.quantity }}" type="number" class="form-control form-control-sm my-2 mx-2" style="font-size: 18px;color: black;"/>
+                            <button class="btn btn-link btn-success text-light  px-2  my-2 mx-2" name="add_quantity">Saqlash</button>
                           </form>
                         </div>
-                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                          <h5 class="mb-0">{{ i.overall_price }} so'm</h5>
-                        </div>
-                        <div class="col-md-1 col-lg-1 col-xl-1 text-end pr-5">
-                          <form action="" method="POST" class="d-flex justify-content-center align-items-center">
-                            {% csrf_token %}
-                            <input type="text" name="product_delete" value="{{ i.product.id }}" style="display: none;">
-                            <button type="submit" name="delete" class="text-danger" style="border: none;background-color: transparent;">
-                              <svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#808185}</style><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
-                            <button>
-                          </form>
+                          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1 d-flex justify-content-between">
+                            <h5 class="mb-0" style="font-size: 20px;">{{ i.overall_price }} so'm</h5>
+                            <form action="" method="POST" class="d-flex justify-content-center align-items-center mx-4">
+                              {% csrf_token %}
+                              <input type="text" name="product_delete" value="{{ i.product.id }}" style="display: none;">
+                              <button type="submit" name="delete" class="text-danger" style="border: none;background-color: transparent;">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 448 512"><style>svg{fill:#808185}</style><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                              <button>
+                            </form>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  
                   {% endfor %}
                  
           
-                  <div class="card">
-                    <div class="card-body">
-                      <button type="button" class="btn btn-warning btn-block btn-lg" data-toggle="modal" data-target="#exampleModal">Proceed to Pay</button>
+                  
+                    <div class="d-flex justify-content-end align-items-center">
+                      <button type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg" data-toggle="modal" data-target="#exampleModal">Zakaz berish</button>
                     </div>
-                  </div>
+                  
           
                 </div>
               </div>

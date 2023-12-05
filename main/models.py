@@ -48,6 +48,12 @@ class Orders(models.Model):
 
     def get_overall(self):
         return int(sum([i.get_overall() for i in self.order_items.all()]))
+    
+    def get_overall_net_profit_orders(self):
+        return int(sum([i.get_overall_net_profit_items() for i in self.order_items.all()]))
+
+    def get_overall_body_price_orders(self):
+        return int(sum(i.get_overall_body_price() for i in self.order_items.all()))
 
 
 class OrderItems(models.Model):
@@ -59,7 +65,13 @@ class OrderItems(models.Model):
 
     def get_overall(self):
         return int(self.products.price * self.quantity)
-
+    
+    def get_overall_net_profit_items(self):
+        return int(self.products.net_profit * self.quantity)
+    
+    def get_overall_body_price_items(self):
+        return int(self.products.body_price * self.quantity)
+    
     def __str__(self):
         return str(self.order.customer_full_name)
 

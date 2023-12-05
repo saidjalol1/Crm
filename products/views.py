@@ -24,13 +24,15 @@ class ProductsList(FormView,ListView):
     paginate_by = 8
     success_url = reverse_lazy('/')
 
-    
+   
     def get_queryset(self):
         queryset = super().get_queryset()
         if 'billur_products' in self.request.GET:
+          
             queryset = queryset.filter(category__name='Billur')
-        elif 'extra-products' in self.request.GET:
-            queryset = queryset.filter(category__name='Boshqalar')
+        elif 'extra_products' in self.request.GET:
+            
+             queryset = queryset.filter(category__name='Boshqalar')
         elif 'search' in self.request.GET:
             queryset = queryset.filter(name__icontains=self.request.GET.get('product'))
         return queryset
@@ -40,18 +42,25 @@ class ProductsList(FormView,ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         wishlist = WishList.objects.get_or_create(session_key=self.request.session.session_key),
+        title = None
+        if 'billur_products' in self.request.path:
+            title = 'Billur tovarlar'
+        elif 'extra-products' in self.request.path:
+            title = "Boshqalar"
+        else:
+            title = " "
+        print(title)
         try:
             user = User.objects.get(id=self.request.user.id)
         except User.DoesNotExist:
             user = None
         # print(user)
         context.update({
-            'categories': ProductCategory.objects.all(),
-            'tags': ProductTag.objects.all(),
             'wishlist_products':wishlist,
             'login_form': AuthenticationForm(),
             'product_form': ProductAddForm(),
             'user': user,
+            'title':title,
         })  
         return context
     

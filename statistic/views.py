@@ -71,7 +71,8 @@ class StatisticsView(View):
         #                                                             order_count=Count('id'),
         #                                                         most_sold_product=Max('order_items__products__name')
         #                                                                 ).order_by('month')
-        most_sold_current_month = Orders.objects.filter(
+        try:
+            most_sold_current_month = Orders.objects.filter(
                                             status='Jonatildi',
                                                 date_added__month=current_month.month,
                                                 date_added__year=current_month.year,
@@ -82,7 +83,10 @@ class StatisticsView(View):
                                                             order_count=Count('id'),
                                                         most_sold_product=Max('order_items__products__name')
                                                     ).order_by('month')
-        most_sold_admin_current_month = Orders.objects.filter(
+        except Orders.DoesNotExist:
+            print("error")
+        try:
+            most_sold_admin_current_month = Orders.objects.filter(
                                             status='Jonatildi',
                                             date_added__month=current_month.month,
                                             date_added__year=current_month.year
@@ -90,8 +94,13 @@ class StatisticsView(View):
                                             total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
                                             order_count=Count('id')
                                             ).order_by('-total_quantity').first()
-        
-
+        except Orders.DoesNotExist:
+            print("error")
+        try:
+            calculate_profits = Orders.objects.filter(date_added__month=current_month.month)
+        except Orders.DoesNotExist:
+            calculate_profits = 0
+        print(calculate_profits)
         data_json = json.dumps(data_list, cls=DjangoJSONEncoder)
         expenses_json = json.dumps(expenses_list, cls=DjangoJSONEncoder)
         per_worker_lists_json = json.dumps(per_worker_list, cls=DjangoJSONEncoder)
@@ -105,6 +114,9 @@ class StatisticsView(View):
         kwargs['current_month_expense'] = sum(i.amount for i in Expenses.objects.filter(date_added__month=current_month.month))
         kwargs['most_sold_current_month'] = most_sold_current_month
         kwargs['admin_best'] =  User.objects.get(id=most_sold_admin_current_month['received_admin'])
+        kwargs['profit_calculations'] = int(sum(i.get_overall_net_profit_orders() for i in calculate_profits ))
+        # kwargs['body_price'] = int(sum(i.get_overall_net_profit_orders() for i in calculate_profits ))
+        # print(kwargs['profit_calculations'])
         # print(kwargs['most_sold'])
         # print(current_month.month)
 

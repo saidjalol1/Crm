@@ -1,4 +1,4 @@
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse,FileResponse
 from django.shortcuts import render,get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.views.generic import ListView, DetailView
@@ -8,7 +8,90 @@ from products.models import Storage
 from products.models import Product
 from .forms import DriverForm, StaffsForm
 
+import io
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.pagesizes import letter
+from django.http import FileResponse
+from reportlab.lib.units import inch
 
+
+import io
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.pagesizes import letter
+from django.http import FileResponse
+from reportlab.lib.units import inch
+from reportlab.lib.styles import getSampleStyleSheet
+
+import io
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.pagesizes import letter
+from django.http import FileResponse
+from reportlab.lib.units import inch
+from reportlab.lib.styles import getSampleStyleSheet
+
+def generate_pdf_for_orders(order):
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=letter, bottomup=0)
+    elements = []
+
+   
+    styles = getSampleStyleSheet()
+    style_normal = styles["Normal"]
+
+    text_lines = [
+        f"<b>Zakaz qilingan sana:</b> {order.date_added}",
+        f"<b>Zakaz qilgan shaxs:</b> {order.customer_full_name}",
+        f"<b>Mijozning Raqami:</b> {order.phone_number}",
+        f"<b>Manzil:</b> {order.address}",
+        f"<b>Mo'ljal:</b> {order.target}",
+        f"<b>Sotuvchi:</b> {order.received_admin}",
+        f"<b>Yetkazib beruvchi:</b> {order.deliver}",
+        f"",
+        f"",
+    ]
+
+
+    for line in text_lines:
+        line_paragraph = Paragraph(line, style_normal)
+        line_paragraph.alignment = 0 
+        elements.append(line_paragraph)
+      
+    page_width, _ = letter
+
+    table_data = [
+        ["Mahsulot", "Narxi", "Soni"],
+    ]
+
+    for item in order.order_items.all():
+        table_data.append([item.products.name, item.products.price, item.quantity])
+
+      
+    column_widths = [page_width / len(table_data[0])] * len(table_data[0])
+
+    table = Table(table_data, colWidths=column_widths)
+
+      
+    style_table = TableStyle([
+        ('LEFTPADDING', (0, 0), (10, 10), inch),
+        ('ALIGN', (1, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ])
+
+    table.setStyle(style_table)
+
+        
+    elements.append(table)
+
+    
+    doc.build(elements)
+
+    buf.seek(0)
+    return buf
 
 
 
@@ -38,8 +121,7 @@ class OrdersView(View):
             elif status and not date:
                 context['orders'] = Orders.objects.filter(status=status)
             else:
-                context['orders'] = Orders.objects.all()
-            return render(request, self.template_name, context)
+                context['orders'] =Orders.objects.all()
         return render(request, self.template_name,context)
     
 
@@ -88,6 +170,13 @@ class OrdersView(View):
                 form.save()
             else:
                 return render(request,self.template_name, self.get_context_data(**context))
+        if 'print' in request.POST:
+            try:
+                order = Orders.objects.get(id=request.POST.get('print'))
+            except Orders.DoesNotExist:
+                raise Http404("Order does not exist")
+            pdf_buffer = generate_pdf_for_orders(order)
+            return FileResponse(pdf_buffer, as_attachment=True, filename='orders_report.pdf')
         return render(request, self.template_name, self.get_context_data(**context))
 
 
