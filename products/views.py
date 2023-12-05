@@ -16,7 +16,7 @@ from django.contrib.auth import login , authenticate
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-
+from django.contrib import messages
 class ProductsList(FormView,ListView):
     model = Product
     form_class = ProductAddForm
@@ -163,6 +163,7 @@ class CardView(View):
         except CartItems.DoesNotExist:
             return HttpResponse('<h1>Savatcha Mahsuotlari topilmadi!!! oldin Savatchaga mahsulot qo\'shing</h1>')
         kwargs['cart_items'] = cart_items
+        kwargs['cart_sum'] = sum([i.overall_price() for i in cart_items])
         return kwargs
 
     def get(self, request, *args, **kwargs):
@@ -175,8 +176,12 @@ class CardView(View):
         if 'add_quantity' in request.POST:
             product = CartItems.objects.get(session_key=request.session.session_key,product_id=request.POST.get('product'))
             quantity = request.POST.get('quantity')
-            product.quantity = int(quantity)
-            product.save()
+            products = Product.objects.get(id=product.product.id)
+            if products.amount < int(quantity):
+                messages.warning(request, 'Kechirasiz mahsulot yetarli emas!! Boshqa Mahsulotlarni ham qarap ko\'ring')
+            else:
+                product.quantity = int(quantity)
+                product.save()
 
         elif 'delete' in request.POST:
             product = CartItems.objects.get(session_key=request.session.session_key,product_id=request.POST.get('product_delete'))
@@ -206,11 +211,8 @@ class CardView(View):
                     # print()
                 cart_items.delete()
                 # order_instance.items.set(cart_items)
-            else:
-                print(sum([i.overall_price() for i in cart_items]))
-                return HttpResponse("<h1>Umumiy qiymat 100000 so'mni tashkil etganda buyurtma berish mumkin!!!</h1>")
-            
-
+            else: 
+                messages.warning(request, 'Umumiy qiymat 100.000 so\'mni tashkil etganda buyurtma berish mumkin!!!')           
         return render(request, self.template_name, self.get_context_data(request,**ctxt))
 
 

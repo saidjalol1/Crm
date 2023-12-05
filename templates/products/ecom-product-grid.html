@@ -89,7 +89,8 @@
 									<a href="{% url 'products:product_detail' i.id %}">
                                     <div class="new-arrivals-img-contnent" style="width: 100%;height: 300px;">
                                         <img class="img-fluid" src="{{ i.image.url }}" alt="" style="width: 100%;height:100%;">
-                                    </div>
+                                    </div>\
+									</a>
                                     <div class="new-arrival-content mt-3">
                                         <div>
 											<div class="d-flex justify-content-between align-items-center pr-3">
@@ -113,8 +114,25 @@
 												">
 												{{ i.price }}so'm
 										</div>
+										<!-- <div class="mt-4 d-flex justify-content-between align-items-center">
+											<button style="cursor: pointer;" class="btn btn-outline-success counter_btn">
+												<svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 576 512">
+													<style>svg{fill:#045ffb}</style>
+													<path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+												</svg>
+											</button>
+											<div class="input-group mx-4 int_input" style="display: none;">
+												<div class="input-group-prepend">
+													<button class="btn btn-outline-success minusBtn">-</button>
+												</div>
+												<input type="number" class="form-control quantity" value="1" style="color: black;">
+												<div class="input-group-append">
+													<button class="btn btn-outline-success plusBtn">+</button>
+												</div>
+											</div>
+										</div> -->
                                     </div>
-									</a>
+									
                                 </div>
                             </div>
                         </div>
@@ -148,6 +166,41 @@
 			</div>
 {% endblock content %}
 {% block scripts %}
+<!-- <script>
+    $(document).ready(function () {
+        $('.counter_btn').click(function () {
+            // Toggle the visibility of the corresponding input group
+            $(this).siblings('.int_input').toggle();
+        });
 
+        $('.plusBtn').click(function () {
+            var quantity = parseInt($(this).siblings('.quantity').val());
+            $(this).siblings('.quantity').val(quantity + 1);
+        });
+
+        $('.minusBtn').click(function () {
+            var quantity = parseInt($(this).siblings('.quantity').val());
+            if (quantity > 1) {
+                $(this).siblings('.quantity').val(quantity - 1);
+            }
+        });
+		$('.addToCartBtn').click(function () {
+            var quantity = parseInt($(this).siblings('.quantity').val());
+
+            $.ajax({
+                url: 'product/add-to-cart' + productIds + '/', 
+                method: 'POST',
+                data: { quantity: quantity },
+                success: function(response) {
+                  
+                    console.log('Product added to cart successfully.');
+                },
+                error: function(error) {
+                    console.error('Error adding product to cart:', error);
+                }
+            });
+        });
+    });
+</script> -->
 
 {% endblock scripts %}

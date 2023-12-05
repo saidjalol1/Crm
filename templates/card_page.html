@@ -8,7 +8,21 @@
 {% block title %}Card{% endblock title%}
 {% block content %}
               <div class="row d-flex justify-content-center align-items-center h-100">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} col-10 mb-4">
+                  {{ message }}
+                </div>
+               
+                {% endfor %}
                 <div class="col-10">
+                  {% if  cart_sum > 100000 %}
+                   <p></p>
+                  {% else %}
+                  <div class="alert alert-warning col-10 mb-4 text-center text-2 text-sm-4" style="margin: 0 auto;">
+                    Umumiy qiymat 100.000 so'mni tashkil etganda buyurtma berish mumkin!!!
+                  </div>
+                  {% endif %}
+                  <h4 style="font-size: 22px;">Umumiy qiymat {{ cart_sum }}</h4>
                   {% for i in cart_items %}
                   <div class="card rounded-3 mb-4 mt-4">
                     <div class="card-body p-4">
@@ -29,7 +43,7 @@
                             <button class="btn btn-link btn-success text-light  px-2  my-2 mx-2" name="add_quantity">Saqlash</button>
                           </form>
                         </div>
-                          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1 d-flex justify-content-between">
+                          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1 d-flex justify-content-between mt-4 mt-sm-0">
                             <h5 class="mb-0" style="font-size: 20px;">{{ i.overall_price }} so'm</h5>
                             <form action="" method="POST" class="d-flex justify-content-center align-items-center mx-4">
                               {% csrf_token %}
@@ -45,10 +59,24 @@
                   
                   {% endfor %}
                  
-          
+                  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                      <img src="..." class="rounded me-2" alt="...">
+                      <strong class="me-auto">Bootstrap</strong>
+                      <small class="text-body-secondary">11 mins ago</small>
+                      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        {{ alert }}
+                    </div>
+                  </div>
                   
                     <div class="d-flex justify-content-end align-items-center">
-                      <button type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg" data-toggle="modal" data-target="#exampleModal">Zakaz berish</button>
+                      {% if  cart_sum > 100000 %}
+                      <button type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg"  data-toggle="modal" data-target="#exampleModal">Zakaz berish</button>
+                      {% else %}
+                      <button disabled type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg"  data-toggle="modal" data-target="#exampleModal">Zakaz berish</button>
+                      {% endif %}
                     </div>
                   
           

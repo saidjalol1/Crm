@@ -5,9 +5,9 @@ class ProductAddForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
-        exclude = ['tag']
+        exclude = ['tag','sold_amount']
         widgets = {
-            'name':forms.TextInput(attrs={'class':'form-control'}),
+            'name':forms.TextInput(attrs={'class':'form-control',}),
             'price':forms.NumberInput(attrs={'class':'form-control'}),
             'net_profit':forms.NumberInput(attrs={'class':'form-control'}),
             'body_price':forms.NumberInput(attrs={'class':'form-control'}),

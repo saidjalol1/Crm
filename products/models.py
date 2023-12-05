@@ -36,18 +36,19 @@ class ProductTag(models.Model):
         return str(self.name)
 
 class Product(models.Model):
-    name = models.CharField(max_length=250)
-    price = models.IntegerField(default=0)
-    old_price = models.IntegerField(default=0)
-    amount = models.IntegerField(default=0)
-    discount = models.PositiveIntegerField(default=0)
+    name = models.CharField(max_length=250,verbose_name = "Tovar nomi")
+    price = models.IntegerField(default=0,verbose_name='Narxi')
+    body_price = models.IntegerField(default=0,verbose_name='Tan Narxi')
+    old_price = models.IntegerField(default=0,verbose_name='Eski narxi')
+    amount = models.PositiveIntegerField(default=0,verbose_name='Soni')
+    discount = models.PositiveIntegerField(default=0,verbose_name='Chegirma')
     image = ResizedImageField(size=[570,650],upload_to='movie_posters/')
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True,verbose_name="Tovar haqida ma'lumot")
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
     tag = models.ForeignKey(ProductTag, on_delete=models.CASCADE, related_name='products', blank=True, null=True)
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE, related_name='products', blank=True, null=True)
-    body_price = models.IntegerField(default=0)
-    net_profit = models.IntegerField(default=0)
+    sold_amount = models.PositiveIntegerField(default=0)
+   
 
     class Meta:
         ordering = ['id']

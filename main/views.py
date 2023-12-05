@@ -31,7 +31,7 @@ from reportlab.lib.pagesizes import letter
 from django.http import FileResponse
 from reportlab.lib.units import inch
 from reportlab.lib.styles import getSampleStyleSheet
-
+from django.contrib import messages
 def generate_pdf_for_orders(order):
     buf = io.BytesIO()
     doc = SimpleDocTemplate(buf, pagesize=letter, bottomup=0)
@@ -130,10 +130,6 @@ class OrdersView(View):
         if 'ready' in request.POST:
             order = Orders.objects.get(id=request.POST.get('order'))
             order.status = request.POST.get('ready')
-            order.save()
-        if 'send' in request.POST:
-            order = Orders.objects.get(id=request.POST.get('order'))
-            order.status = request.POST.get('send')
             order_items = order.order_items.all()
             order.received_admin = request.user
             order.deliver_id = request.POST.get('driver_select')
@@ -141,13 +137,19 @@ class OrdersView(View):
             for i in order_items:
                 products = Product.objects.get(id=i.products.id)
                 if products.amount < i.quantity:
-                    return HttpResponse(f"<h1>Mahsulot {products.name} omborda yetarli emas</h1>")
+                    messages.warning(request, f'Mahsulot {products.name} omborda yetarli emas')
                 else:
                     products.amount -= i.quantity
+                    products.sold_amount += i.quantity
                     products.save()
                     print(products.amount)
                     print(i.products)
                     print(i)
+            order.save()
+           
+        if 'send' in request.POST:
+            order = Orders.objects.get(id=request.POST.get('order'))
+            order.status = request.POST.get('send')
             order.save()
         if 'is_being' in request.POST:
             order = Orders.objects.get(id=request.POST.get('order'))
@@ -170,6 +172,10 @@ class OrdersView(View):
                 form.save()
             else:
                 return render(request,self.template_name, self.get_context_data(**context))
+        if 'edit' in request.POST:
+            order = Orders.objects.get(id=request.POST.get('order'))
+            order.direction = request.POST.get('direction')
+            order.save()
         if 'print' in request.POST:
             try:
                 order = Orders.objects.get(id=request.POST.get('print'))

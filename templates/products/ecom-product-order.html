@@ -24,25 +24,25 @@
                         </form>
                     </div>
                     <div class="col-lg-12">
-                       
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} col-10 mb-4">
+                                {{ message }}
+                            </div>
+               
+                {% endfor %}
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-sm mb-0 table-responsive-lg text-black">
                                         <thead>
                                             <tr>
-                                                <th class="align-middle">
-                                                    <div class="custom-control custom-checkbox ml-1">
-														<input type="checkbox" class="custom-control-input" id="checkAll">
-														<label class="custom-control-label" for="checkAll"></label>
-													</div>
-                                                </th>
-                                                <th class="align-middle">Buyurtma</th>
-                                                <th class="align-middle pr-7">Sana</th>
-                                                <th class="align-middle minw200">Manzil</th>
-                                                <th class="align-middle text-right">Mo'ljal</th>
-                                                <th class="align-middle text-right">Holati</th>
-                                                <th class="align-middle text-right">Summasi</th>
+                                                <th class="align-middle" style="color: black;font-size: 18px;">Buyurtma</th>
+                                                <th class="align-middle pr-7" style="color: black;font-size: 18px;">Sana</th>
+                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">Manzil</th>
+                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">Yo'nalish</th>
+                                                <th class="align-middle text-center" style="color: black;font-size: 18px;">Mo'ljal</th>
+                                                <th class="align-middle text-center" style="color: black;font-size: 18px;">Holati</th>
+                                                <th class="align-middle text-center" style="color: black;font-size: 18px;">Summasi</th>
                                                 <th class="no-sort"></th>
                                             </tr>
                                         </thead>
@@ -50,17 +50,14 @@
 											{% for i in orders %}
                                             <tr class="btn-reveal-trigger">
                                                 <td class="py-2">
-                                                    <div class="custom-control custom-checkbox checkbox-success">
-														<input type="checkbox" class="custom-control-input" id="checkbox">
-														<label class="custom-control-label" for="checkbox"></label>
-													</div>
-                                                </td>
-                                                <td class="py-2">
                                                     <a href="{% url 'main:order_detail' i.id %}">
-                                                        <strong>#{{ i.id }}</strong></a> by <strong>{{ i.customer_full_name }}</strong><br /><a href="mailto:ricky@example.com">{{ i.phone_number }}</a></td>
-                                                <td class="py-2">{{ i.date_added }}</td>
-                                                <td class="py-2">{{ i.address }}</td>
-                                                <td class="py-2">{{ i.target }}</td>
+                                                        <strong>#{{ i.id }}</strong> by <strong>{{ i.customer_full_name }}</strong><br />{{ i.phone_number }}
+                                                    </a>
+                                                </td>
+                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.date_added }}</td>
+                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.direction }}</td>
+                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.address }}</td>
+                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.target }}</td>
                                                 <td class="py-2 text-right">
                                                     <span class="badge 
                                                             {% if i.status == 'Jonatildi'%}
@@ -92,6 +89,7 @@
                                                                     <button class="dropdown-item" name="received" type="submit" value="Qabul qilindi">Qabul qilish</button>
                                                                     <button class="dropdown-item" name="cancel" type="submit" value="Rad etildi">Rad etish</button>
                                                                     <button class="dropdown-item" name="print" type="submit" value="{{ i.id }}">Chop etish</button>
+                                                                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#edit">Yo'nalish Qo'shish</button>
                                                                     <!-- <form action="" method="POST">
                                                                         {% csrf_token %}
                                                                         <input type="text" name="order" value="{{ i.id }}" style="display: none;">
@@ -118,6 +116,7 @@
                                                   </div>
                                                   <div class="modal-body">
                                                     <form action="" method="POST">
+                                                        Haydovchi Tanlang
                                                         <select name="driver_select" id="driver_select_id" class="form-control">
                                                             <option selected>-----</option>
                                                           {% for i in delivers %}
@@ -130,6 +129,29 @@
                                                     </div>
                                                 </form>
                                                 </form>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabe2" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <div class="modal-content">
+                                                  <form method="POST">
+                                                    {% csrf_token %}
+                                                    <input type="text" name="order" value="{{ i.id }}" style="display: none;">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Yo'nalish Qo'shing</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                            <input type="text" value="{{ i.id }}" class="d-none" name="order">
+                                                            <input type="text" class="form-control" placeholder="Yo'nalishni kiriting" name="direction">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary" value="Jonatildi" name="edit" >Jo'natish</button>
+                                                    </div>
+                                                    </form>
                                                   </div>
                                                 </div>
                                             </div>
