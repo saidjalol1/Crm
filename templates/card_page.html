@@ -41,7 +41,7 @@
                           <form action="" method="POST" class="d-flex">
                             {% csrf_token %}
                             <input type="text" name="product" value="{{ i.product.id }}" style="display: none;">
-                            <input id="form1" min="0" name="quantity" value="{{ i.quantity }}" type="number" class="form-control form-control-sm my-2 mx-2" style="font-size: 18px;color: black;"/>
+                            <input id="form1" min="0" name="quantity" value="{{ i.quantity }}" type="number" class="form-control form-control-sm my-2 mx-2" style="font-size: 18px;color: black;width: 100px;"/>
                             <button class="btn btn-link btn-success text-light  px-2  my-2 mx-2" name="add_quantity">Saqlash</button>
                           </form>
                         </div>
@@ -75,17 +75,18 @@
                     </div>
                   </div>
                   
-                    <div class="d-flex justify-content-end align-items-center">
-                      {% if  cart_sum > 100000 %}
-                      <button type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg"  data-toggle="modal" data-target="#exampleModal">Zakaz berish</button>
-                      {% else %}
-                      <button disabled type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg"  data-toggle="modal" data-target="#exampleModal">Zakaz berish</button>
-                      {% endif %}
-                    </div>
                     
                   </div>
                 </div>
                 {% endif %}
+                
+                <div class="d-flex justify-content-end align-items-center">
+                  {% if  cart_sum > 100000 %}
+                  <button type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg"  data-toggle="modal" data-target="#exampleModal">Zakaz berish</button>
+                  {% else %}
+                  <button disabled type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg"  data-toggle="modal" data-target="#exampleModal">Zakaz berish</button>
+                  {% endif %}
+                </div>
               <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">

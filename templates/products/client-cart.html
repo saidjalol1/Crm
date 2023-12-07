@@ -1,0 +1,229 @@
+{% extends 'trendi_base.html' %}
+{% load static %}
+{% block style %}
+{% endblock style %}
+{% block title %}Savatcha{% endblock title%}
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<div class="container">
+    {% if cart_items %}
+    <div class="row d-flex justify-content-center align-items-center h-100 mt-10">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} col-10 mb-4">
+          {{ message }}
+        </div>
+        {% endfor %}
+      
+        <div class="col-10">
+          {% if  cart_sum > 100000 %}
+           <p></p>
+          {% else %}
+          <div class="alert alert-warning col-10 mb-4 text-center text-2 text-sm-4" style="margin: 0 auto;">
+            Umumiy qiymat 100.000 so'mni tashkil etganda buyurtma berish mumkin!!!
+          </div>
+          {% endif %}
+          <h4 style="font-size: 22px;">Umumiy qiymat {{ cart_sum }}</h4>
+          {% for i in cart_items %}
+          <div class="card rounded-3 mb-4 mt-4">
+            <div class="card-body p-4">
+              <div class="row d-flex justify-content-between align-items-center pr-8">
+                <div class="col-md-2 col-lg-2 col-xl-2" style="height: 200px;">
+                  <img src="{{ i.product.image.url }}" class="img-fluid rounded-3" alt="{{ i.product.name }}" style="width: 100%;height: 100%;">
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-3">
+                  <h4 class="mb-2" style="font-size: 25px;">{{ i.product.name }}</h4>
+                  <p style="font-size: 20px;color: black;"><span  style="font-size: 22px;color: black;">Chegirma: </span>{{ i.product.discount }}%</p>
+                  <p style="font-size: 20px;color: black;"><span  style="font-size: 22px;color: black;">Donasi: </span>{{ i.product.price }} so'm</p>
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                  <form action="" method="POST" class="d-flex">
+                    {% csrf_token %}
+                    <input type="text" name="product" value="{{ i.product.id }}" style="display: none;">
+                 
+                        <input id="form1" min="0" name="quantity" value="{{ i.quantity }}" type="number" class="form-control form-control-sm my-2 mx-2" style="font-size: 18px;color: black;width: 50px;"/>
+                    
+                    
+                        <button class="btn btn-primary  px-2  my-2 mx-2" name="add_quantity">Saqlash</button>
+                    
+                   
+                  </form>
+                </div>
+                  <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1 d-flex justify-content-between mt-4 mt-sm-0">
+                    <h5 class="mb-0" style="font-size: 20px;">{{ i.overall_price }} so'm</h5>
+                    <form action="" method="POST" class="d-flex justify-content-center align-items-center mx-4">
+                      {% csrf_token %}
+                      <input type="text" name="product_delete" value="{{ i.product.id }}" style="display: none;">
+                      <button type="submit" name="delete" class="text-danger outline-none" style="border: none;background-color: transparent;">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 448 512"><style>svg{fill:#808185}</style><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                      <button>
+                    </form>
+                  </div>
+                </div>
+            </div>
+          </div>
+          {% endfor %}
+         {% else %}
+         <h4 style="color: black;font-size: 25px;text-align: center;">Hech narsa yo'q</h4>
+
+        </div>
+    </div>
+    {% endif %}
+    <div class="d-flex justify-content-end align-items-center">
+        {% if  cart_sum > 100000 %}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Zakaz berish
+        </button>
+        {% else %}
+        <button disabled type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Zakaz berish
+        </button>
+        {% endif %}
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <form method="POST">
+                {% csrf_token %}
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                  <label>Ism Familiya</label>
+                  <input  class="form-control" placeholder='Ism Familiya' name="customer_full_name"/>
+                </p>
+                <p>
+                  <label>Telefon Raqam</label>
+                  <input  class="form-control" placeholder='Telefon Raqam' name="phone_number"/>
+                </p>
+                <p>
+                  <label>Manzil</label>
+                  <input  class="form-control" placeholder='Manzil' name="address"/>
+                </p>
+                <p>
+                  <label>Mo'ljal</label>
+                  <input  class="form-control" placeholder="Mo'ljal" name="target"/>
+                </p>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" name="order">Buyurtma berish</button>
+            </div>
+        </form>
+            </div>
+          </div>
+        </div>
+      </div>
+<div class="modal fade" id="order" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+  <form method="POST">
+    {% csrf_token %}
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Zakaz Berish</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <p>
+        <label>Ism Familiya</label>
+        <input  class="form-control" placeholder='Ism Familiya' name="customer_full_name"/>
+      </p>
+      <p>
+        <label>Telefon Raqam</label>
+        <input  class="form-control" placeholder='Telefon Raqam' name="phone_number"/>
+      </p>
+      <p>
+        <label>Manzil</label>
+        <input  class="form-control" placeholder='Manzil' name="address"/>
+      </p>
+      <p>
+        <label>Mo'ljal</label>
+        <input  class="form-control" placeholder="Mo'ljal" name="target"/>
+      </p>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary" name="order">Buyurtma berish</button>
+  </div>
+</form>
+  </div>
+</div>
+</div>
+</div>             
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+            
+            
+{% endblock content %}
+        
+
+    <!-- **********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <!-- <script src="./vendor/global/global.min.js"></script>
+	<script src="./vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+	<script src="./vendor/chart.js/Chart.bundle.min.js"></script>
+    <script src="./js/custom.min.js"></script>
+	<script src="./js/deznav-init.js"></script>
+	<script src="./vendor/owl-carousel/owl.carousel.js"></script> -->
+	
+	<!-- Chart piety plugin files -->
+    <!-- <script src="./vendor/peity/jquery.peity.min.js"></script> -->
+	
+	<!-- Apex Chart -->
+	<!-- <script src="./vendor/apexchart/apexchart.js"></script> -->
+	
+	<!-- Dashboard 1 -->
+	<!-- <script src="./js/dashboard/dashboard-1.js"></script> -->
+    
+    <!-- <script src="./vendor/flot/jquery.flot.js"></script> -->
+    <!-- <script src="./vendor/flot/jquery.flot.pie.js"></script> -->
+    <!-- <script src="./vendor/flot/jquery.flot.resize.js"></script> -->
+    <!-- <script src="./vendor/flot-spline/jquery.flot.spline.min.js"></script> -->
+    <!-- <script src="./js/plugins-init/flot-init.js"></script> -->
+	<!-- <script>
+		function carouselReview(){
+			/*  testimonial one function by = owl.carousel.js */
+			jQuery('.testimonial-one').owlCarousel({
+				loop:true,
+				autoplay:true,
+				margin:30,
+				nav:false,
+				dots: false,
+				left:true,
+				navText: ['<i class="fa fa-chevron-left" aria-hidden="true"></i>', '<i class="fa fa-chevron-right" aria-hidden="true"></i>'],
+				responsive:{
+					0:{
+						items:1
+					},
+					484:{
+						items:2
+					},
+					882:{
+						items:3
+					},	
+					1200:{
+						items:2
+					},			
+					
+					1540:{
+						items:3
+					},
+					1740:{
+						items:4
+					}
+				}
+			})			
+		}
+		jQuery(window).on('load',function(){
+			setTimeout(function(){
+				carouselReview();
+			}, 1000); 
+		});
+	</script> -->

@@ -50,15 +50,15 @@
                                                         <strong>#{{ i.id }}</strong> by <strong>{{ i.customer_full_name }}</strong><br />{{ i.phone_number }}
                                                     </a>
                                                 </td>
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.date_added }}</td>
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.direction }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.date_added }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.direction }}</td>
                                                 {% if i.payment_type %}
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.payment_type }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.payment_type }}</td>
                                                 {% else %}
-                                                <td class="py-2" style="color: black;font-size: 20px;">Qilinmadi</td>
+                                                <td class="py-2" style="color: black;">Qilinmadi</td>
                                                 {% endif %}
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.address }}</td>
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.target }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.address }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.target }}</td>
                                                 <td class="py-2 text-right">
                                                     <span class="badge 
                                                             {% if i.status == 'Jo\'natildi' %}

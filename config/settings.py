@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'products.apps.ProductsConfig',
     'statistic.apps.StatisticConfig',
+    'trendi.apps.TrendiConfig',
     "crispy_forms",
     "debug_toolbar",
     "crispy_bootstrap4",

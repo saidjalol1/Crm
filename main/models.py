@@ -80,6 +80,10 @@ class WishList(models.Model):
     session_key = models.CharField(max_length=40,blank=True, null=True)
 
 
+    def add_product(self, product):
+        self.products.add(product)
+
+        
     def __str__(self):
         return str(self.date_added)
     

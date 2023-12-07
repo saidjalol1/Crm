@@ -120,6 +120,7 @@ class ProductDetail(DetailView):
 
 
 def add_to_cart(request, product_id):
+    referring_url = request.META.get('HTTP_REFERER')
     product = get_object_or_404(Product, id=product_id)
     session_key = request.session.session_key
     if 'quantity' in request.POST:
@@ -160,7 +161,7 @@ def add_to_cart(request, product_id):
             )
             cart_item.quantity += 1
             cart_item.save()
-    return redirect('products:product_list')
+    return redirect(referring_url)
 
 
 class CardView(View):

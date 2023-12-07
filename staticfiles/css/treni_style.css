@@ -1,0 +1,344 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    outline: none;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+}
+.cursor{
+    cursor: pointer;
+}
+.container{
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 2%;
+}
+.header-in{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    padding: 15px 0px;
+}
+.header__image{
+    width: 250px;
+    height: 120px;
+}
+.header__contact{
+    display: flex;
+}
+.header__contact--phone-number{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-right: 20px;
+}
+.header__contact--button{
+    padding: 10px 30px;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    background-color: #782fef;
+    font-weight: bold;
+}
+.header__burger{
+    font-size: 30px;
+    display: none;
+}
+.sidebar{
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0px;
+}
+.sidebar_active{
+    display: flex;
+}
+.sidebar__contact{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.sidebar__contact--phone-number{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 20px 0px;
+}
+.sidebar__contact--button{
+    padding: 10px 20px;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    background-color: #782fef;
+    font-weight: bold;
+}
+.hero-in{
+    padding: 15px 0px;
+}   
+.hero__image{
+    width: 80%;
+    height: 550px;
+}
+.hero__slide--container{
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.hero__slide{
+    display: none;
+    width: 100%;
+    justify-content: center;
+}
+.dot{
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    margin: 20px 5px 0px 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
+.active, .dot:hover{
+    background-color: #717171;
+}
+.hero__buttons{
+    width: 40px;
+    height: 40px;
+    background-color: #e8e8e8;
+    font-size: 20px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    position: absolute;
+}
+.prev{
+    left: 2%;
+}
+.next{
+    right: 2%;
+}
+.fade{
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1s;
+    animation-name: fade;
+    animation-duration: 1s;
+}
+.products-in{
+    padding: 30px 0;
+}
+.products__list{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+.products__item{
+    margin: 10px 20px;
+}
+.products__cardbox{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
+}
+.products__card{
+    display: flex;
+    flex-direction: column;
+    background-color: #e8e8e8;
+    border-radius: 30px;
+    color: #000;
+}
+.product__card--image{
+    max-width: 100%;
+    height: 75%;
+    border-radius: 30px 30px 0px 0px;
+}
+.products__description{
+    font-size: 20px;
+    padding: 0px 30px;
+}
+.product__price{
+    margin: 30px 0px;
+    padding: 0px 30px;
+}
+.delivery{
+    background-color: #e8e8e8;
+}
+.delivery-in{
+    padding: 60px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.delivery__top{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px;
+    width: 100%;
+}
+.delivery__types{
+    background-color: #fff;
+    width: 60%;
+    display: flex;
+    border: 2px solid #e8e8e8;
+    justify-content: space-between;
+    position: relative;
+    flex-direction: column;
+    overflow: hidden;
+    height: 75px;
+    transition: 300ms;
+}
+.delivery_active{
+    height: auto;
+}
+.delivery__bottom{
+    padding: 10px 35px;
+}
+.delivery-plus_active{
+    transform: rotate(45deg);
+}
+.delivery-bottom_active{
+    display: block;
+}
+.delivery__bottom--items{
+    list-style-type: disc;
+    margin: 10px 0px;
+}
+.delivery__more{
+    background-color: #e8e8e8;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+}
+.contact{
+    background-image: url("../images/purple_background.jpg");
+    background-position: center;
+    background-size: cover;
+}
+.contact-in{
+    padding: 100px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    color: #fff;
+}
+.contact__phone-number{
+    margin: 40px 0px;
+}
+.contact__title{
+    font-size: 50px;
+}
+.contact__subtitle{
+    font-size: 40px;
+    font-weight: bolder;
+}
+footer{
+    background-color: #000;
+    color: grey;
+}
+.footer-in{
+    padding: 20px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.footer__image{
+    width: 25px;
+    height: 25px;
+}
+@-webkit-keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+@keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+@media only screen and (max-width: 1100px){
+    .products-in{
+        padding: 30px 2%;
+    }
+    .delivery__types{
+        width: 80%;
+    }
+}
+@media only screen and (max-width: 1000px){
+    .header__contact{
+        flex-direction: column;
+    }
+    .header__contact--phone-number{
+        margin-right: 0px;
+        margin-bottom: 20px;
+    }
+    .hero__image{
+        width: 600px;
+        height: 400px;
+    }
+}
+@media only screen and (max-width: 900px){
+    .products__cardbox{
+        grid-template-columns: 1fr 1fr;
+    }
+    .products__description{
+        font-size: 18px;
+    }
+}
+@media only screen and (max-width: 800px){
+    .header__about{
+        display: none;
+    }
+    .header__contact{
+        display: none;
+    }
+    .header__burger{
+        display: flex;
+    }
+}
+@media only screen and (max-width: 750px){
+    .hero .container{
+        padding: 0 0%;
+    }
+    .hero__image{
+        width: 100%;
+        height: 400px;
+    }
+    .delivery__bottom--items{
+        font-size: 15px;
+    }
+    .contact__title{
+        font-size: 35px;
+    }
+    .contact__subtitle{
+        font-size: 25px;
+        font-weight: bolder;
+    }
+}
+@media only screen and (max-width: 550px){
+    .products__cardbox{
+        grid-template-columns: 1fr;
+    }
+    .delivery__top--title{
+        font-size: 20px;
+    }
+    .delivery__types{
+        width: 90%;
+    }
+    .delivery__top--title{
+        font-size: 18px;
+    }
+    .hero__image{
+        height: 350px;
+    }
+}

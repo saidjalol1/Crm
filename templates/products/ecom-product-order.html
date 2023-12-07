@@ -34,14 +34,14 @@
                                     <table class="table table-sm mb-0 table-responsive-lg text-black">
                                         <thead>
                                             <tr>
-                                                <th class="align-middle" style="color: black;font-size: 18px;">Buyurtma</th>
-                                                <th class="align-middle pr-7" style="color: black;font-size: 18px;">Sana</th>
-                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">Yo'nalish</th>
-                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">To'lov turi</th>
-                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">Manzil</th>
-                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">Mo'ljal</th>
-                                                <th class="align-middle text-center" style="color: black;font-size: 18px;">Holati</th>
-                                                <th class="align-middle text-center" style="color: black;font-size: 18px;">Summasi</th>
+                                                <th class="align-middle" style="color: black;">Buyurtma</th>
+                                                <th class="align-middle pr-7" style="color: black;">Sana</th>
+                                                <th class="align-middle minw200" style="color: black;">Yo'nalish</th>
+                                                <th class="align-middle minw200" style="color: black;">To'lov turi</th>
+                                                <th class="align-middle minw200" style="color: black;">Manzil</th>
+                                                <th class="align-middle minw200" style="color: black;">Mo'ljal</th>
+                                                <th class="align-middle text-center" style="color: black;">Holati</th>
+                                                <th class="align-middle text-center" style="color: black;">Summasi</th>
                                                 <th class="no-sort"></th>
                                             </tr>
                                         </thead>
@@ -53,15 +53,15 @@
                                                         <strong>#{{ i.id }}</strong> by <strong>{{ i.customer_full_name }}</strong><br />{{ i.phone_number }}
                                                     </a>
                                                 </td>
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.date_added }}</td>
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.direction }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.date_added }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.direction }}</td>
                                                 {% if i.payment_type %}
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.payment_type }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.payment_type }}</td>
                                                 {% else %}
-                                                <td class="py-2" style="color: black;font-size: 20px;">Qilinmadi</td>
+                                                <td class="py-2" style="color: black;">Qilinmadi</td>
                                                 {% endif %}
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.address }}</td>
-                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.target }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.address }}</td>
+                                                <td class="py-2" style="color: black;">{{ i.target }}</td>
                                                 <td class="py-2 text-right">
                                                     <span class="badge 
                                                             {% if i.status == 'Jo\'natildi' %}
