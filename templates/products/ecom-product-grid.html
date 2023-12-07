@@ -89,9 +89,9 @@
 									<a href="{% url 'products:product_detail' i.id %}">
                                     <div class="new-arrivals-img-contnent" style="width: 100%;height: 300px;">
                                         <img class="img-fluid" src="{{ i.image.url }}" alt="" style="width: 100%;height:100%;">
-                                    </div>\
+                                    </div>
 									</a>
-                                    <div class="new-arrival-content mt-3">
+                                    <div class="new-arrival-content mt-4">
                                         <div>
 											<div class="d-flex justify-content-between align-items-center pr-3">
 												<h4 style="font-size: 22px;color: black;">
@@ -104,9 +104,6 @@
 											</div>
 											<p style="font-size: 22px;color: black;">Omborda: {% if i.amount == 0 %}mavjud emas {% else %} {{ i.amount }}ta{% endif %}</p>
 										</div>
-										{% if i.old_price > 0 %}
-										<div class="badge badge-light text-danger"><strike>{{ i.old_price }} so'm</strike></div>
-										{% endif %}
                                         <div class="mt-2" 
 											style="font-weight: 600;
 												color: #0B2A97;
@@ -114,6 +111,16 @@
 												">
 												{{ i.price }}so'm
 										</div>
+										{% if user.is_superuser %}
+										<div class="mt-2 d-flex align-items-center justify-content-start" data-toggle="modal" data-target="#nabor_add_{{ i.id }}" style="cursor: pointer;">
+											<p>
+												<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 640 512">
+													<path d="M58.9 42.1c3-6.1 9.6-9.6 16.3-8.7L320 64 564.8 33.4c6.7-.8 13.3 2.7 16.3 8.7l41.7 83.4c9 17.9-.6 39.6-19.8 45.1L439.6 217.3c-13.9 4-28.8-1.9-36.2-14.3L320 64 236.6 203c-7.4 12.4-22.3 18.3-36.2 14.3L37.1 170.6c-19.3-5.5-28.8-27.2-19.8-45.1L58.9 42.1zM321.1 128l54.9 91.4c14.9 24.8 44.6 36.6 72.5 28.6L576 211.6v167c0 22-15 41.2-36.4 46.6l-204.1 51c-10.2 2.6-20.9 2.6-31 0l-204.1-51C79 419.7 64 400.5 64 378.5v-167L191.6 248c27.8 8 57.6-3.8 72.5-28.6L318.9 128h2.2z"/>
+												</svg>
+											</p>
+											<h4 class="ml-2 mt-1" style="font-size: 18px;">Naborga qo'shish</h4>
+										</div>
+										{% endif %}
 										<!-- <div class="mt-4 d-flex justify-content-between align-items-center">
 											<button style="cursor: pointer;" class="btn btn-outline-success counter_btn">
 												<svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 576 512">
@@ -132,7 +139,34 @@
 											</div>
 										</div> -->
                                     </div>
-									
+									<div class="modal fade" id="nabor_add_{{ i.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+										  <div class="modal-content">
+										  <form method="POST">
+											{% csrf_token %}
+										  <div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Nabor Qo'shish</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+											</button>
+										  </div>
+										  <div class="modal-body">
+											  <input type="text" name="product" value="{{ i.id }}" class="d-none">
+											<input type="number" name="quantity" class="form-control mb-2" placeholder="soni">
+											<select name="package" class="form-control">
+												<option selected >Nabor tanlang</option>
+												{% for nabor in naborlar %}
+												<option value="{{ nabor.id }}">{{ nabor.name }}</option>
+												{% endfor %}
+											</select>
+										  </div>
+										  <div class="modal-footer">
+											<button type="submit" class="btn btn-primary" name="add_to_package">Saqlash</button>
+										  </div>
+										</form>
+										  </div>
+										</div>
+									  </div>
                                 </div>
                             </div>
                         </div>

@@ -6,14 +6,12 @@
                 <div class="row mt-4">
                     <div class="col-lg-12">
                         <form action="" method="GET" class="d-flex justify-content-between align-items-center mb-2 ml-2">
-                            {% csrf_token %}
+                           
                             <div class="d-flex">
                                 <select name="by_status" id="by_status_id" class="form-control">
                                     <option selected>Holati bo'yicha</option>
-                                    <option value="Tayyor">Tayyorlar</option>
-                                    <option value="Jonatildi">Jonatilganlar</option>
-                                    <option value="Tayyorlanmoqda">Tayyorlanayotganlar</option>
-                                    <option value="Qabul qilindi">Qabul qilingan</option>
+                                    <option value="Tasdiqlandi">Tasdiqlanganlar</option>
+                                    <option value="Jo'natildi">Jo'natilganlar</option>
                                     <option value="Rad etildi">Rad etilgan</option>
                                 </select>
                                 <input  name="by_date" id="by_date_id" placeholder="Sanasi bo'yicha" class="form-control mx-2" type="date">
@@ -29,7 +27,7 @@
                                 {{ message }}
                             </div>
                
-                {% endfor %}
+                        {% endfor %}
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -38,9 +36,10 @@
                                             <tr>
                                                 <th class="align-middle" style="color: black;font-size: 18px;">Buyurtma</th>
                                                 <th class="align-middle pr-7" style="color: black;font-size: 18px;">Sana</th>
-                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">Manzil</th>
                                                 <th class="align-middle minw200" style="color: black;font-size: 18px;">Yo'nalish</th>
-                                                <th class="align-middle text-center" style="color: black;font-size: 18px;">Mo'ljal</th>
+                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">To'lov turi</th>
+                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">Manzil</th>
+                                                <th class="align-middle minw200" style="color: black;font-size: 18px;">Mo'ljal</th>
                                                 <th class="align-middle text-center" style="color: black;font-size: 18px;">Holati</th>
                                                 <th class="align-middle text-center" style="color: black;font-size: 18px;">Summasi</th>
                                                 <th class="no-sort"></th>
@@ -56,13 +55,18 @@
                                                 </td>
                                                 <td class="py-2" style="color: black;font-size: 20px;">{{ i.date_added }}</td>
                                                 <td class="py-2" style="color: black;font-size: 20px;">{{ i.direction }}</td>
+                                                {% if i.payment_type %}
+                                                <td class="py-2" style="color: black;font-size: 20px;">{{ i.payment_type }}</td>
+                                                {% else %}
+                                                <td class="py-2" style="color: black;font-size: 20px;">Qilinmadi</td>
+                                                {% endif %}
                                                 <td class="py-2" style="color: black;font-size: 20px;">{{ i.address }}</td>
                                                 <td class="py-2" style="color: black;font-size: 20px;">{{ i.target }}</td>
                                                 <td class="py-2 text-right">
                                                     <span class="badge 
-                                                            {% if i.status == 'Jonatildi'%}
+                                                            {% if i.status == 'Jo\'natildi' %}
                                                                 badge-success
-                                                            {% elif i.status == 'Tayyorlanmoqda' %}
+                                                            {% elif i.status == 'Tasdiqlandi' %}
                                                                 badge-warning
                                                             {% elif i.status == 'Tayyor' %}
                                                                 badge-primary
@@ -79,80 +83,96 @@
                                                 <td class="py-2 text-right">
                                                     <div class="dropdown text-sans-serif"><button class="btn btn-primary tp-btn-light sharp" type="button" id="order-dropdown-0" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="5" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="19" cy="12" r="2"></circle></g></svg></span></button>
                                                         <div class="dropdown-menu dropdown-menu-right border py-0" aria-labelledby="order-dropdown-0">
+                                                          <div class="py-2">
                                                             <form action="" method="POST">
                                                                 {% csrf_token %}
-                                                                <div class="py-2">
                                                                     <input type="text" name="order" value="{{ i.id }}" style="display: none;">
-                                                                    <button class="dropdown-item" name="ready" type="submit" value="Tayyor">Tayyor</button>
-                                                                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#send">Jonatish</button>
-                                                                    <button class="dropdown-item" name="is_being" type="submit" value="Tayyorlanmoqda">Tayyorlanmoqda</button>
-                                                                    <button class="dropdown-item" name="received" type="submit" value="Qabul qilindi">Qabul qilish</button>
+                                                                    <button class="dropdown-item" name="received" type="submit" value="Tasdiqlandi">Tasdiqlash</button>
                                                                     <button class="dropdown-item" name="cancel" type="submit" value="Rad etildi">Rad etish</button>
                                                                     <button class="dropdown-item" name="print" type="submit" value="{{ i.id }}">Chop etish</button>
-                                                                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#edit">Yo'nalish Qo'shish</button>
-                                                                    <!-- <form action="" method="POST">
-                                                                        {% csrf_token %}
-                                                                        <input type="text" name="order" value="{{ i.id }}" style="display: none;">
-                                                                        <button class="dropdown-item text-danger" type="submit" name="delete">Delete</button>
-                                                                    </form> -->
-                                                                </div>
-                                                                
-                                                            </form>
+                                                                </form>
+                                                                {% if user.is_superuser %}
+                                                                <button class="dropdown-item" name="cancel" type="submit" data-toggle="modal" data-target="#payment_type_add_{{ i.id }}">To'lov turi</button>
+                                                                {% endif %}
+                                                                <button class="dropdown-item" name="add_direction" type="btn" data-toggle="modal" data-target="#direction_add_{{ i.id }}">Yo'nalish qo'shish</button>
+                                                                <button class="dropdown-item" type="button" data-toggle="modal" data-target="#order_send_{{ i.id }}">Jonatish</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <div class="modal fade" id="send" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabe2" aria-hidden="true">
+                                            <div class="modal fade" id="order_send_{{ i.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabe2" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
-                                                  <div class="modal-content">
-                                                  <form method="POST">
-                                                    {% csrf_token %}
-                                                    <input type="text" name="order" value="{{ i.id }}" style="display: none;">
+                                                    <div class="modal-content">
                                                   <div class="modal-header">
                                                     <h5 class="modal-title" id="exampleModalLabel">Haydovchini Tanlang</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                     </button>
                                                   </div>
-                                                  <div class="modal-body">
-                                                    <form action="" method="POST">
+                                                  <form action="" method="POST">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
                                                         Haydovchi Tanlang
+                                                        <input type="text" name="order" value="{{ i.id }}" style="display: none;">
                                                         <select name="driver_select" id="driver_select_id" class="form-control">
                                                             <option selected>-----</option>
-                                                          {% for i in delivers %}
-                                                              <option value="{{ i.id }}">{{ i.name }}</option>
+                                                          {% for driver in delivers %}
+                                                              <option value="{{ driver.id }}">{{ driver.name }}</option>
                                                           {% endfor %}
-                                                          </select>
+                                                        </select>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-primary" value="Jonatildi" name="send" >Jo'natish</button>
+                                                        <button type="submit" class="btn btn-primary" name="send" value="Jo'natildi">Jo'natish</button>
                                                     </div>
-                                                </form>
-                                                </form>
-                                                  </div>
+                                                    </form>
+                                                </div>
                                                 </div>
                                             </div>
-                                            <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabe2" aria-hidden="true">
+                                            <div class="modal fade" id="direction_add_{{ i.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabe2" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
-                                                  <div class="modal-content">
-                                                  <form method="POST">
-                                                    {% csrf_token %}
-                                                    <input type="text" name="order" value="{{ i.id }}" style="display: none;">
+                                                    <div class="modal-content">
                                                   <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Yo'nalish Qo'shing</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Haydovchini Tanlang</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                     </button>
                                                   </div>
-                                                  <div class="modal-body">
-                                                            <input type="text" value="{{ i.id }}" class="d-none" name="order">
-                                                            <input type="text" class="form-control" placeholder="Yo'nalishni kiriting" name="direction">
+                                                  <form action="" method="POST">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                      Yo'nalish Qo'shing
+                                                        <input type="text" name="order" value="{{ i.id }}" style="display: none;">
+                                                        <input type="text" placeholder="Yo'nalish qo'shing" class="form-control" name="direction">
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-primary" value="Jonatildi" name="edit" >Jo'natish</button>
+                                                        <button type="submit" class="btn btn-primary" name="add_direction" >Qo'shish</button>
                                                     </div>
                                                     </form>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade" id="payment_type_add_{{ i.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabe2" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Haydovchini Tanlang</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
                                                   </div>
+                                                  <form action="" method="POST">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                      To'lov turi
+                                                        <input type="text" name="order" value="{{ i.id }}" style="display: none;">
+                                                        <input type="text" placeholder="To'lov turi" class="form-control" name="payment_type">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary" name="payment_type_add" >Qo'shish</button>
+                                                    </div>
+                                                    </form>
+                                                </div>
                                                 </div>
                                             </div>
                                            	{% endfor %}
@@ -163,14 +183,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                      <button type="button" class="btn btn-warning btn-block btn-lg" data-toggle="modal" data-target="#driverModal">Haydovchi Qo'shish</button>
-                    </div>
-                  </div>
-          
+              
+                <div class="d-flex justify-content-end">
+                    <button type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg" data-toggle="modal" data-target="#driverModal">Haydovchi Qo'shish</button>
                 </div>
-              </div>
+                    
+              
               <div class="modal fade" id="driverModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">

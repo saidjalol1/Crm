@@ -39,7 +39,6 @@ class Product(models.Model):
     name = models.CharField(max_length=250,verbose_name = "Tovar nomi")
     price = models.IntegerField(default=0,verbose_name='Narxi')
     body_price = models.IntegerField(default=0,verbose_name='Tan Narxi')
-    old_price = models.IntegerField(default=0,verbose_name='Eski narxi')
     amount = models.PositiveIntegerField(default=0,verbose_name='Soni')
     discount = models.PositiveIntegerField(default=0,verbose_name='Chegirma')
     image = ResizedImageField(size=[570,650],upload_to='movie_posters/')
@@ -58,7 +57,7 @@ class Product(models.Model):
         overall_products = self.storage.overall_products_number()
         if overall_products > 0:
             percentage = (self.amount / overall_products) * 100
-            return round(percentage, 2)
+            return round(percentage)
         else:
             return 0
 

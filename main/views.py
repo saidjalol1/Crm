@@ -3,10 +3,10 @@ from django.shortcuts import render,get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.views.generic import ListView, DetailView
 from django.views import View
-from .models import Orders, OrderItems, Deliver, Expenses, Staffs
+from .models import Orders, OrderItems, Deliver, Expenses, Staffs, PackageItems, Packages
 from products.models import Storage
 from products.models import Product
-from .forms import DriverForm, StaffsForm
+from .forms import DriverForm, StaffsForm, PackagesForm
 
 import io
 from reportlab.lib import colors
@@ -62,11 +62,11 @@ def generate_pdf_for_orders(order):
     page_width, _ = letter
 
     table_data = [
-        ["Mahsulot", "Narxi", "Soni"],
+        ["Mahsulot", "Narxi", "Soni","Umumiy qiymati"],
     ]
 
     for item in order.order_items.all():
-        table_data.append([item.products.name, item.products.price, item.quantity])
+        table_data.append([item.products.name, item.products.price, item.quantity,item.get_overall()])
 
       
     column_widths = [page_width / len(table_data[0])] * len(table_data[0])
@@ -127,55 +127,54 @@ class OrdersView(View):
 
     def post(self, request, *args, **kwargs):
         context = {}
-        if 'ready' in request.POST:
-            order = Orders.objects.get(id=request.POST.get('order'))
-            order.status = request.POST.get('ready')
-            order_items = order.order_items.all()
-            order.received_admin = request.user
-            order.deliver_id = request.POST.get('driver_select')
-            # print(order_items)
-            for i in order_items:
-                products = Product.objects.get(id=i.products.id)
-                if products.amount < i.quantity:
-                    messages.warning(request, f'Mahsulot {products.name} omborda yetarli emas')
-                else:
-                    products.amount -= i.quantity
-                    products.sold_amount += i.quantity
-                    products.save()
-                    print(products.amount)
-                    print(i.products)
-                    print(i)
-            order.save()
-           
-        if 'send' in request.POST:
-            order = Orders.objects.get(id=request.POST.get('order'))
-            order.status = request.POST.get('send')
-            order.save()
-        if 'is_being' in request.POST:
-            order = Orders.objects.get(id=request.POST.get('order'))
-            order.status = request.POST.get('is_being')
-            order.save()
         if 'received' in request.POST:
             order = Orders.objects.get(id=request.POST.get('order'))
-            order.status = request.POST.get('received')
+            for i in order.order_items.all():
+                if i.products.amount < i.quantity:
+                    messages.warning(request, f"Omborda { i.products.name } yetarli emas")
+                else:
+                    order.status = request.POST.get('received')
+                    order_items = order.order_items.all()
+                    order.received_admin = request.user
+                    order.deliver_id = request.POST.get('driver_select')
+            # print(order_items)
+                    for i in order_items:
+                        products = Product.objects.get(id=i.products.id)
+                        if products.amount < i.quantity:
+                            messages.warning(request, f'Mahsulot {products.name} omborda yetarli emas')
+                        else:
+                            products.amount -= i.quantity
+                            products.sold_amount += i.quantity
+                            products.save()
+                            print(products.amount)
+                            print(i.products)
+                            print(i)
+                            order.save()
+        if 'send' in request.POST:
+            print("Id--------",request.POST.get('order'))
+            order = Orders.objects.get(id=request.POST.get('order'))
+            deliver_obj = Deliver.objects.get(id=request.POST.get('driver_select'))
+            order.deliver = deliver_obj
+            order.status = request.POST.get('send')
+            order.save()
+        if 'payment_type_add' in request.POST:
+            order = Orders.objects.get(id=request.POST.get('order'))
+            order.payment_type = request.POST.get('payment_type')
             order.save()
         if 'cancel' in request.POST:
             order = Orders.objects.get(id=request.POST.get('order'))
             order.status = request.POST.get('cancel')
             order.save()
-        if 'delete' in request.POST:
-            order_instance = Orders.objects.get(pk=request.POST.get('order'))
-            order_instance.delete()
+        if 'add_direction' in request.POST:
+            order = Orders.objects.get(id=request.POST.get('order'))
+            order.direction = request.POST.get('direction')
+            order.save()
         if 'driver' in request.POST:
             form = DriverForm(request.POST)
             if form.is_valid():
                 form.save()
             else:
                 return render(request,self.template_name, self.get_context_data(**context))
-        if 'edit' in request.POST:
-            order = Orders.objects.get(id=request.POST.get('order'))
-            order.direction = request.POST.get('direction')
-            order.save()
         if 'print' in request.POST:
             try:
                 order = Orders.objects.get(id=request.POST.get('print'))
@@ -318,3 +317,81 @@ class ExpensesView(View):
         return render(request, self.template_name, self.get_context_data(**context))
     
 
+class PackageView(View):
+    template_name = "naborlar.html"
+
+
+    def get_context_data(self,*args,**kwargs):
+        kwargs['nabor'] = Packages.objects.all()
+        kwargs['form'] = PackagesForm()
+        return kwargs
+    
+    def get(self, request,*args, **kwargs):
+        context = self.get_context_data()
+        return render(request, self.template_name, context)
+    
+    def post(self, request,*args,**kwargs):
+        context = {}
+        if 'package_add' in request.POST:
+            form = PackagesForm(request.POST)
+            if form.is_valid():
+                form.save()
+            else:
+                form = PackagesForm()
+        return render(request, self.template_name, self.get_context_data(**context))
+
+
+class PackageDetailView(View):
+    template_name = 'nabor_detail.html'
+
+    def get_object(self):
+        try:
+            object = Packages.objects.get(pk=self.kwargs['pk'])
+            print(object.get_overall_price())
+        except Packages.DoesNotExist:
+            raise Http404('Package not found!')
+        return object
+
+
+    def get_context_data(self, **kwargs):
+        kwargs['object'] = self.get_object()
+        return kwargs
+    
+    def get(self,request,*args,**kwargs):
+        return render(request, self.template_name,self.get_context_data())
+
+
+    def post(self,request,*args,**kwargs):
+        ctxt = {}
+        if 'add_quantity' in request.POST:
+            item = PackageItems.objects.get(id=request.POST.get('product'))
+            product = Product.objects.get(id=item.product.id)
+            quantity = request.POST.get('quantity')
+            if product.amount < int(quantity):
+                messages.warning(request, 'Kechirasiz mahsulot yetarli emas!! Boshqa Mahsulotlarni ham qarap ko\'ring')
+            else:
+                item.quantity = int(quantity)
+                item.save()
+        elif 'delete' in request.POST:
+            item = PackageItems.objects.get(id=request.POST.get('product_delete'))
+            item.delete()
+        elif 'order' in request.POST:
+            session_key = request.session.session_key
+            package_items = PackageItems.objects.filter(package=self.get_object())
+            order_instance = Orders.objects.create(
+                customer_full_name=request.POST.get('customer_full_name'),
+                address=request.POST.get('address'),
+                target=request.POST.get('target'),
+                phone_number=request.POST.get('phone_number'),
+                session_key=session_key,
+                )
+            for i in range(len(package_items)):
+                print(package_items[i].product)
+                order_items = OrderItems.objects.create(
+                    quantity = package_items[i].quantity,
+                    sessionkey = session_key,
+                    order = order_instance,
+                    products = package_items[i].product
+                    )
+                # order_instance.items.set(cart_items)
+        return render(request, self.template_name, self.get_context_data(**ctxt))

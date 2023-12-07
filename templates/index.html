@@ -21,18 +21,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-6 col-sm-6">
-				<div class="card">
-					<div class="card-header">
-						<h4>Eng ko'p Sotilgan tovar</h4>
-					</div>
-					<div class="card-body">
-						{% for entry in most_sold_current_month %}
-    						<h2> {{ entry.most_sold_product }}</h2>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
+			
 			<div class="col-lg-6 col-sm-6">
 				<div class="card">
 					<div class="card-header">
@@ -53,13 +42,42 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-12 col-sm-6">
+			<div class="col-lg-6 col-sm-6">
 				<div class="card">
 					<div class="card-header">
-						<h4>Shu oydagi sof foyda</h4>
+						<h4>Eng ko'p Sotilgan tovar</h4>
 					</div>
 					<div class="card-body">
-						<h2>{{ profit_calculations }} so'm<h2></h2>
+						{% if most_sold_current_month %}
+						<p style="font-size: 20px;color: black;"><h2>{{ most_sold_current_month.order_items__products__name }}</h2></p>
+						<p style="font-size: 20px;color: black;">Miqdori: {{ most_sold_current_month.total_quantity }}</p>
+					{% else %}
+						<p>No data available for the most sold product.</p>
+					{% endif %}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-sm-6">
+				<div class="card">
+					<div class="card-header">
+						<h4>Plastik Savdo</h4>
+					</div>
+					<div class="card-body">
+						<h2>{{card_sale.total_quantity }} so'm<h2></h2>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-sm-6">
+				<div class="card">
+					<div class="card-header">
+						<h4>Naxd Savdo</h4>
+					</div>
+					<div class="card-body">
+						{% if money_sale %}
+						<h2>{{ money_sale.total_quantity }} so'm<h2>
+						{% else %}
+						<h2>Ma'lumot mavjud emas</h2>
+						{% endif %}
 					</div>
 				</div>
 			</div>

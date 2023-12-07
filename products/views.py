@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, TemplateView
 from .models import Product, ProductCategory, ProductTag
 from django.http import HttpResponse
-from main.models import Orders, CartItems, OrderItems, WishList
+from main.models import Orders, CartItems, OrderItems, WishList, Packages, PackageItems
 from django.views import View
 from .forms import ProductAddForm
 from django.urls import reverse_lazy
@@ -17,6 +17,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+
 class ProductsList(FormView,ListView):
     model = Product
     form_class = ProductAddForm
@@ -61,6 +62,7 @@ class ProductsList(FormView,ListView):
             'product_form': ProductAddForm(),
             'user': user,
             'title':title,
+            'naborlar':Packages.objects.all()
         })  
         return context
     
@@ -100,7 +102,15 @@ class ProductsList(FormView,ListView):
                 else:
                     print('wrong')
                     return redirect('products:product_list')
-                
+        if 'add_to_package' in request.POST:
+            product = Product.objects.get(id=request.POST.get('product'))
+            quantity = request.POST.get('quantity')
+            package = Packages.objects.get(id=request.POST.get('package'))
+            package_item = PackageItems.objects.create(
+                product = product,
+                quantity = quantity,
+                package = package
+            )
         return render(request, self.template_name, self.get_context_data())
 
     

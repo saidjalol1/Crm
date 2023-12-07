@@ -26,7 +26,7 @@ class StatisticsView(View):
 
     def get_context_data(self,*args,**kwargs):
         try:
-            data = Orders.objects.filter(status='Jonatildi').annotate(
+            data = Orders.objects.filter(status="Jo'natildi").annotate(
                  month=TruncMonth('date_added')
                         ).values('month').annotate(
                                     total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
@@ -37,8 +37,7 @@ class StatisticsView(View):
             for entry in data
             ]
         except Orders.DoesNotExist:
-            print('error')
-
+            data = "Ma'lumot mavjud emas"
         try:
             expenses = Expenses.objects.annotate(
                                 month=TruncMonth('date_added')
@@ -50,9 +49,9 @@ class StatisticsView(View):
                 for entry in expenses
             ]
         except Expenses.DoesNotExist:
-            print('doesnt exite')
+            expenses = "Ma'lumot mavjud emas"
         try:
-            per_worker = Orders.objects.filter(status='Jonatildi').annotate(
+            per_worker = Orders.objects.filter(status="Jo'natildi").annotate(
                  month=TruncMonth('date_added')
                         ).values('month', 'received_admin').annotate(
                                     total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
@@ -63,31 +62,37 @@ class StatisticsView(View):
             for entry in per_worker
             ]
         except Orders.DoesNotExist:
-            print('error')
-        # most_sold =  Orders.objects.filter(status='Jonatildi').annotate(
-        #                                                         month=TruncMonth('date_added')
-        #                                                                 ).values('month').annotate(
-        #                                                                     total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
-        #                                                             order_count=Count('id'),
-        #                                                         most_sold_product=Max('order_items__products__name')
-        #                                                                 ).order_by('month')
+            per_worker = "Ma'lumot mavjud emas"
         try:
-            most_sold_current_month = Orders.objects.filter(
-                                            status='Jonatildi',
-                                                date_added__month=current_month.month,
-                                                date_added__year=current_month.year,
-                                                    ).annotate(
-                                                        month=TruncMonth('date_added')
-                                                            ).values('month').annotate(
-                                                                total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
-                                                            order_count=Count('id'),
-                                                        most_sold_product=Max('order_items__products__name')
-                                                    ).order_by('month')
+            most_sold_products_current_month = Orders.objects.filter(
+                                         
+                status="Jo'natildi",
+                date_added__month=current_month.month,
+                date_added__year=current_month.year
+                ).annotate(
+                month=TruncMonth('date_added'),
+                        product_quantity=Sum('order_items__quantity')
+                            ).values('order_items__products__name').order_by('-product_quantity').first()
+            
         except Orders.DoesNotExist:
             print("error")
+
         try:
             most_sold_admin_current_month = Orders.objects.filter(
-                                            status='Jonatildi',
+                                            status="Jo'natildi",
+                                            date_added__month=current_month.month,
+                                            date_added__year=current_month.year
+                                            ).values('received_admin').annotate(
+                                            total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
+                                            order_count=Count('id')
+                                            ).order_by('-total_quantity').first()
+        except Orders.DoesNotExist:
+            most_sold_admin_current_month = "Ma'lumot mavjud emas"
+
+        try:
+            card_sale = Orders.objects.filter(
+                                            status="Jo'natildi",
+                                            payment_type='plastik',
                                             date_added__month=current_month.month,
                                             date_added__year=current_month.year
                                             ).values('received_admin').annotate(
@@ -96,11 +101,24 @@ class StatisticsView(View):
                                             ).order_by('-total_quantity').first()
         except Orders.DoesNotExist:
             print("error")
+
         try:
-            calculate_profits = Orders.objects.filter(date_added__month=current_month.month)
+            money_sale = Orders.objects.filter(
+                                            status="Jo'natildi",
+                                            payment_type='naxt',
+                                            date_added__month=current_month.month,
+                                            date_added__year=current_month.year
+                                            ).values('received_admin').annotate(
+                                            total_quantity=Sum(F('order_items__products__price') * F('order_items__quantity')),
+                                            order_count=Count('id')
+                                            ).order_by('-total_quantity').first()
         except Orders.DoesNotExist:
-            calculate_profits = 0
-        print(calculate_profits)
+            money_sale = "Ma'lumot mavjud emas"
+        # print(calculate_profits)
+        # print(most_sold_products_current_month)
+        # most_sold = sum([i.quantity for i in OrderItems.objects.filter(product__name = most_sold_products_current_month.order_items__products__name)])
+        # print(most_sold)
+        print
         data_json = json.dumps(data_list, cls=DjangoJSONEncoder)
         expenses_json = json.dumps(expenses_list, cls=DjangoJSONEncoder)
         per_worker_lists_json = json.dumps(per_worker_list, cls=DjangoJSONEncoder)
@@ -112,9 +130,14 @@ class StatisticsView(View):
         kwargs['users'] = User.objects.filter()
         kwargs['current_month_sale'] = sum(i.get_overall() for i in Orders.objects.filter(date_added__month=current_month.month))
         kwargs['current_month_expense'] = sum(i.amount for i in Expenses.objects.filter(date_added__month=current_month.month))
-        kwargs['most_sold_current_month'] = most_sold_current_month
-        kwargs['admin_best'] =  User.objects.get(id=most_sold_admin_current_month['received_admin'])
-        kwargs['profit_calculations'] = int(sum(i.get_overall_net_profit_orders() for i in calculate_profits ))
+        kwargs['most_sold_current_month'] = most_sold_products_current_month
+        if most_sold_admin_current_month:
+            kwargs['admin_best'] =  User.objects.get(id=most_sold_admin_current_month['received_admin'])
+        else:
+            kwargs['admin_best'] = "Ma'lumot mavjud emas"
+        kwargs['card_sale'] = card_sale
+        kwargs['money_sale'] = money_sale
+        # kwargs['profit_calculations'] = int(sum(i.get_overall_net_profit_orders() for i in calculate_profits ))
         # kwargs['body_price'] = int(sum(i.get_overall_net_profit_orders() for i in calculate_profits ))
         # print(kwargs['profit_calculations'])
         # print(kwargs['most_sold'])

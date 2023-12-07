@@ -1,5 +1,5 @@
 from django import forms
-from .models import Orders, Deliver, Staffs
+from .models import Orders, Deliver, Staffs, Packages
 
 class DriverForm(forms.ModelForm):
     class Meta:
@@ -17,4 +17,13 @@ class StaffsForm(forms.ModelForm):
             'address':forms.TextInput(attrs={'placeholder':'Manzil'}),
             'salary':forms.NumberInput(attrs={'placeholder':'Oylik'}),
             'position':forms.NumberInput(attrs={'placeholder':'Lavozimi'}),
+        }
+
+
+class PackagesForm(forms.ModelForm):
+    class Meta:
+        model = Packages
+        exclude= ['order']
+        widgets = {
+            'name' : forms.TextInput(attrs={'class':"form-control"}),
         }

@@ -1,0 +1,49 @@
+{% extends 'wrapper.html' %}
+{% load static %}
+{% block title %}
+Naborlar
+{% endblock title %}
+{% block content %}
+{% load crispy_forms_tags %}
+    <div class="row">
+        {% for i in nabor %}
+        <div class="col-lg-6 col-sm-6">
+                <div class="card">
+                   <a href="{% url 'main:package_detail' i.id %}">
+                    <div class="card-header">
+                       <h1> {{ i.name }}</h1>
+                    </div>
+                    <div class="card-body">
+                       <h2> Umumiy qiymati: <span class="text-danger">{{ i.get_overall_price }}</span></h2>
+                    </div>
+                   </a>
+                </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex justify-content-end">
+        <button type="button" style="width: 300px;" class="btn btn-warning btn-block btn-lg" data-toggle="modal" data-target="#nabor_add">Nabor Qo'shish</button>
+    </div>
+        
+  <div class="modal fade" id="nabor_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      <form method="POST">
+        {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Nabor Qo'shish</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ form|crispy }}
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" name="package_add">Saqlash</button>
+      </div>
+    </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

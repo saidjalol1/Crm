@@ -112,22 +112,22 @@
             <div class="deznav-scroll">
 				<ul class="metismenu" id="menu">
                     <li>
-                        {% if user.is_staff %}
+                        {% if user.is_superuser %}
                         <a href="{% url 'main:storage' %}"  aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 640 512">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 640 512">
                                 <path d="M0 488V171.3c0-26.2 15.9-49.7 40.2-59.4L308.1 4.8c7.6-3.1 16.1-3.1 23.8 0L599.8 111.9c24.3 9.7 40.2 33.3 40.2 59.4V488c0 13.3-10.7 24-24 24H568c-13.3 0-24-10.7-24-24V224c0-17.7-14.3-32-32-32H128c-17.7 0-32 14.3-32 32V488c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24zm488 24l-336 0c-13.3 0-24-10.7-24-24V432H512l0 56c0 13.3-10.7 24-24 24zM128 400V336H512v64H128zm0-96V224H512l0 80H128z"/>
                             </svg>
-                            <span class="nav-text">Ombor</span>
+                            <span class="nav-text" style="font-size: 17px;">Ombor Ko'rsatkichalri</span>
                         </a>
                             {% endif %}
                     </li>
                     <li>
-                        {% if user.is_staff %}
+                        {% if user.is_superuser %}
                         <a href="{% url 'statistic:statistics' %}"  aria-expanded="false">
                             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512">
                                 <path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/>
                             </svg>
-                            <span class="nav-text" >Statistikalar</span>
+                            <span class="nav-text"style="font-size: 17px;" >Statistikalar</span>
                         </a>
                             {% endif %}
                     </li>
@@ -137,7 +137,17 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                                 <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H289.9L247 53.1C233.5 39.6 215.2 32 196.1 32H64zM48 96c0-8.8 7.2-16 16-16H196.1c6.4 0 12.5 2.5 17 7l45.3 45.3c7.5 7.5 17.7 11.7 28.3 11.7H448c8.8 0 16 7.2 16 16v32H48V96zm0 144H464V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V240z"/>
                             </svg>
-                            <span class="nav-text" >Buyurtmalar</span>
+                            <span class="nav-text"style="font-size: 17px;" >Buyurtmalar</span>
+                        </a>
+                            {% endif %}
+                    </li>
+                    <li>
+                        {% if user.is_staff %}
+                        <a href="{% url 'main:package_add' %}" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 640 512">
+                                <path d="M58.9 42.1c3-6.1 9.6-9.6 16.3-8.7L320 64 564.8 33.4c6.7-.8 13.3 2.7 16.3 8.7l41.7 83.4c9 17.9-.6 39.6-19.8 45.1L439.6 217.3c-13.9 4-28.8-1.9-36.2-14.3L320 64 236.6 203c-7.4 12.4-22.3 18.3-36.2 14.3L37.1 170.6c-19.3-5.5-28.8-27.2-19.8-45.1L58.9 42.1zM321.1 128l54.9 91.4c14.9 24.8 44.6 36.6 72.5 28.6L576 211.6v167c0 22-15 41.2-36.4 46.6l-204.1 51c-10.2 2.6-20.9 2.6-31 0l-204.1-51C79 419.7 64 400.5 64 378.5v-167L191.6 248c27.8 8 57.6-3.8 72.5-28.6L318.9 128h2.2z"/>
+                            </svg>
+                            <span class="nav-text"style="font-size: 17px;" >Naborlar</span>
                         </a>
                             {% endif %}
                     </li>
@@ -147,7 +157,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512">
                                 <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
                             </svg>
-                            <span class="nav-text" >Buyurtmalar holati</span>
+                            <span class="nav-text"style="font-size: 17px;" >Buyurtmalar holati</span>
                         </a>
                             {% endif %}
                     </li>
@@ -157,15 +167,15 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512">
                                 <path d="M384 96V224H256V96H384zm0 192V416H256V288H384zM192 224H64V96H192V224zM64 288H192V416H64V288zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/>
                             </svg>
-                            <span class="nav-text" >Barcha Tovarlar</span>
+                            <span class="nav-text"style="font-size: 17px;" >Barcha Tovarlar</span>
                         </a>
                             {% endif %}
                     </li>
                     <li>
-                        {% if user.is_staff %}
+                        {% if user.is_superuser %}
                         <a href="{%  url 'main:staffs' %}"  aria-expanded="false">
-                            <i class="flaticon-381-networking"></i>
-                            <span class="nav-text">Ishchilar bo'limi</span>
+                            <i class="flaticon-381-networking" style="color: blue;"></i>
+                            <span class="nav-text" style="font-size: 17px;">Ishchilar bo'limi</span>
                         </a>
                             {% endif %}
                     </li>
@@ -175,7 +185,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                                 <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/>
                             </svg>
-                            <span class="nav-text">Logout</span>
+                            <span style="font-size: 17px;">Logout</span>
                         </a>
                             {% endif %}
                     </li>
@@ -194,11 +204,11 @@
                     {% endif %}
                     <li>
                         {% if user.is_staff %}
-                        <a  href="https://t.me/Saidjalol10"  aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="18" width="10" viewBox="0 0 320 512">
+                        <a  href="https://t.me/software_developer_007"  aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="10" viewBox="0 0 320 512">
                                 <path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/>
                             </svg>
-                            <span class="nav-text">Yordam</span>
+                            <span style="font-size: 18px;color: black;">Yordam</span>
                         </a>
                             {% endif %}
                     </li>
