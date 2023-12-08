@@ -11,6 +11,5 @@ urlpatterns = [
     path('cart_page/', views.CardView.as_view(), name='cart'),
     path('wishlist/toggle/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('wishlist/', views.WishListView.as_view(),name='wishlist'),
-    # path('product/to_card/<product_id>', views.add_to_cart, name='add_to')
     path('logout', LogoutView.as_view(), name='logout'),
 ]

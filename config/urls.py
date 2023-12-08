@@ -19,13 +19,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('statistics/', include('main.urls', namespace='main')),
     path('calculations/', include('statistic.urls',namespace='statistic')),
-    path('', include('products.urls', namespace='products')),
-    path('trendi/', include('trendi.urls', namespace='trendi')),
+    path('crm/', include('products.urls', namespace='products')),
+    path('', include('trendi.urls', namespace='trendi')),
     path("__debug__/", include("debug_toolbar.urls")),
 ]
 

@@ -16,6 +16,10 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from products.views import add_to_cart
 # class TrendiView(TemplateView):
 #     template_name = "trendi.html"
 
@@ -128,3 +132,64 @@ class CardView(View):
             else: 
                 messages.warning(request, 'Umumiy qiymat 100.000 so\'mni tashkil etganda buyurtma berish mumkin!!!')           
         return render(request, self.template_name, self.get_context_data(request,**ctxt))
+
+
+class WishListView(View):
+    template_name = 'trendi-wishlist.html'
+    
+
+    def get_context_data(self, **kwargs):
+        session_key = self.request.session.session_key
+        print(self.request.session.session_key)
+        wishlist = WishList.objects.get(session_key=session_key)
+        products = wishlist.products.all()
+        status = False
+        if products:
+            status = True
+        else:
+            pass
+        kwargs['wishlist'] = wishlist
+        kwargs['wishlist_status'] = status
+        return kwargs
+
+
+    def get(self,reqeust, *args, **kwargs):
+        return render(reqeust, self.template_name, self.get_context_data())
+    
+
+    def post(self,request, *args, **kwargs):
+        ctxt = {}
+        if 'add_to_cart' in request.POST:
+            request = request
+            product_id = request.POST.get('product')
+            print(product_id)
+            add_to_cart(request,product_id)
+        elif 'delete' in request.POST:
+            wishlist = WishList.objects.get(session_key=request.session.session_key)
+            product_id = request.POST.get('product')
+            print(product_id)
+            product = get_object_or_404(Product, id=product_id)
+            wishlist.products.remove(product)
+        return render(request, self.template_name, self.get_context_data(**ctxt))
+
+@require_POST
+def add_to_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    session_key = request.session.session_key
+
+    if not session_key:
+        request.session.save()
+        session_key = request.session.session_key
+
+    wishlist, created = WishList.objects.get_or_create(session_key=session_key)
+    
+    if product in wishlist.products.all():
+        wishlist.products.remove(product)
+        is_added = False
+    else:
+        wishlist.products.add(product)
+        is_added = True
+
+    return JsonResponse({'is_added': is_added})
+
+

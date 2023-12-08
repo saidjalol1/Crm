@@ -11,7 +11,7 @@
             var productId = $(this).data('product-id');
 
             $.ajax({
-                url: '/wishlist/toggle/' + productId + '/',
+                url: 'crm/wishlist/toggle/' + productId + '/',
                 type: 'POST',
                 dataType: 'json',
                 headers: { 'X-CSRFToken': getCookie('csrftoken') }, // Include CSRF token
@@ -152,8 +152,8 @@
 										  </div>
 										  <div class="modal-body">
 											  <input type="text" name="product" value="{{ i.id }}" class="d-none">
-											<input type="number" name="quantity" class="form-control mb-2" placeholder="soni">
-											<select name="package" class="form-control">
+											<input type="number" name="quantity" class="form-control mb-2" placeholder="soni" style="color: black;">
+											<select name="package" class="form-control" style="color: black;">
 												<option selected >Nabor tanlang</option>
 												{% for nabor in naborlar %}
 												<option value="{{ nabor.id }}">{{ nabor.name }}</option>

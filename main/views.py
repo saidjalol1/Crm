@@ -134,22 +134,21 @@ class OrdersView(View):
                     messages.warning(request, f"Omborda { i.products.name } yetarli emas")
                 else:
                     order.status = request.POST.get('received')
-                    order_items = order.order_items.all()
                     order.received_admin = request.user
                     order.deliver_id = request.POST.get('driver_select')
             # print(order_items)
-                    for i in order_items:
-                        products = Product.objects.get(id=i.products.id)
-                        if products.amount < i.quantity:
-                            messages.warning(request, f'Mahsulot {products.name} omborda yetarli emas')
-                        else:
-                            products.amount -= i.quantity
-                            products.sold_amount += i.quantity
-                            products.save()
-                            print(products.amount)
-                            print(i.products)
-                            print(i)
-                            order.save()
+            for i in order.order_items.all():
+                products = Product.objects.get(id=i.products.id)
+                if products.amount < i.quantity:
+                    messages.warning(request, f'Mahsulot {products.name} omborda yetarli emas')
+                else:
+                    products.amount -= i.quantity
+                    products.sold_amount += i.quantity
+                    products.save()
+                    print(products.amount)
+                    print(i.products)
+                    print(i)
+                    order.save()
         if 'send' in request.POST:
             print("Id--------",request.POST.get('order'))
             order = Orders.objects.get(id=request.POST.get('order'))

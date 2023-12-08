@@ -23,8 +23,9 @@
                     Umumiy qiymat 100.000 so'mni tashkil etganda bu nabor sotilishi mumkin!!!
                   </div>
                   {% endif %}
-                  <h4 style="font-size: 22px;">Umumiy qiymat {{ cart_sum }}</h4>
+                  <h4 style="font-size: 22px;">Umumiy qiymat : {{ object.get_overall_price }}</h4>
                   
+                  <h1 style="text-align: center;">{{ object.name }}</h1>
                   {% for i in object.package_items.all %}
                   <div class="card rounded-3 mb-4 mt-4">
                     <div class="card-body p-4">
@@ -41,7 +42,7 @@
                           <form action="" method="POST" class="d-flex">
                             {% csrf_token %}
                             <input type="text" name="product" value="{{ i.id }}" style="display: none;">
-                            <input id="form1" min="0" name="quantity" value="{{ i.quantity }}" type="number" class="form-control form-control-sm my-2 mx-2" style="font-size: 18px;color: black;"/>
+                            <input id="form1" min="0" name="quantity" value="{{ i.quantity }}" type="number" class="form-control form-control-sm my-2 mx-2" style="font-size: 18px;color: black;width: 100px;"/>
                             <button class="btn btn-link btn-success text-light  px-2  my-2 mx-2" name="add_quantity">Saqlash</button>
                           </form>
                         </div>
