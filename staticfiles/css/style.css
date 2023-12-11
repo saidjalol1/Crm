@@ -244,7 +244,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 *,
 *::before,
 *::after {
-  box-sizing: border-box; }
+  box-sizing: border-box; 
+}
 
 html {
   font-family: sans-serif;
@@ -263,7 +264,9 @@ body {
   line-height: 1.5;
   color: #7e7e7e;
   text-align: left;
-  background-color: #F9F9F9; }
+  background-color: #F9F9F9;
+  overflow-x: hidden;
+}
 
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important; }

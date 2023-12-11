@@ -70,17 +70,8 @@
                             </div>
                         </div>
                         <ul class="navbar-nav header-right">
-							<li class="nav-item">
-								<form action="" method="GET">
-                                    <div class="input d-flex align-items-center form-control">
-                                        <div><input type="text" name="product" style="border: none;outline: none;padding: 4% 5%;" placeholder="Izlash"></div>
-                                        <button name="search" type="submit" style="background-color: transparent;border: none; padding: 2% 2%;"><i class="flaticon-381-search-2" style="font-size: 20px;"></i></button>
-                                    </div>
-                                </form>
-                              
-							</li>
                             <li class="nav-item dropdown notification_dropdown">
-                                <a class="nav-link  ai-icon  d-none d-lg-block d-sm-block d-md-block d-xs-block" href='{% url "products:wishlist" %}'>
+                                <a class="nav-link  ai-icon " href='{% url "products:wishlist" %}'>
 									<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                                         <style>svg{fill:#045ffb}</style>
                                         <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
@@ -88,7 +79,7 @@
                                 </a>
                             </li>
 							<li class="nav-item dropdown notification_dropdown ">
-                                <a class="nav-link  ai-icon  d-none d-lg-block d-sm-block d-md-block d-xs-block" href='{% url "products:cart" %}'>
+                                <a class="nav-link  ai-icon " href='{% url "products:cart" %}'>
 									<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
                                         <style>svg{fill:#045ffb}</style>
                                         <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
@@ -147,7 +138,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 640 512">
                                 <path d="M58.9 42.1c3-6.1 9.6-9.6 16.3-8.7L320 64 564.8 33.4c6.7-.8 13.3 2.7 16.3 8.7l41.7 83.4c9 17.9-.6 39.6-19.8 45.1L439.6 217.3c-13.9 4-28.8-1.9-36.2-14.3L320 64 236.6 203c-7.4 12.4-22.3 18.3-36.2 14.3L37.1 170.6c-19.3-5.5-28.8-27.2-19.8-45.1L58.9 42.1zM321.1 128l54.9 91.4c14.9 24.8 44.6 36.6 72.5 28.6L576 211.6v167c0 22-15 41.2-36.4 46.6l-204.1 51c-10.2 2.6-20.9 2.6-31 0l-204.1-51C79 419.7 64 400.5 64 378.5v-167L191.6 248c27.8 8 57.6-3.8 72.5-28.6L318.9 128h2.2z"/>
                             </svg>
-                            <span class="nav-text"style="font-size: 17px;" >Naborlar</span>
+                            <span class="nav-text"style="font-size: 17px;" >To'plamlar</span>
                         </a>
                             {% endif %}
                     </li>
@@ -185,7 +176,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                                 <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/>
                             </svg>
-                            <span style="font-size: 17px;">Logout</span>
+                            <span class="nav-text" style="font-size: 17px;">Logout</span>
                         </a>
                             {% endif %}
                     </li>
@@ -193,44 +184,26 @@
                     <p></p>
                     {% else %}
                     <li>
-                       <a href="{% url 'products:logout' %}"  aria-expanded="false">
                         <form action="" method="GET" class="w-100 px-2">
                         
                             <button type="submit" id="btn1" class="btn btn-outline-success w-100" name="billur_products">Billur tovarlar</button>
                             <button type="submit" id="btn2" class="btn btn-outline-success w-100 mt-2" name="extra_products">Boshqalar</button>
                         </form>
-                        </a>
                     </li>
                     {% endif %}
                     <li>
                         {% if user.is_staff %}
-                        <a  href="https://t.me/software_developer_007"  aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="10" viewBox="0 0 320 512">
+                        <a href="https://t.me/software_developer_007"  aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 320 512">
                                 <path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/>
                             </svg>
-                            <span style="font-size: 18px;color: black;">Yordam</span>
+                            <span class="nav-text" style="font-size: 18px;color: black;">Yordam</span>
                         </a>
-                            {% endif %}
+                        {% endif %}
                     </li>
-                    <li class="d-lg-none">
+                    <li class="d-block d-sm-none">
                         <a data-target="#loginModal" data-toggle="modal">Log in</a>
                     </li>
-                   
-                <li class="nav-item dropdown notification_dropdown d-lg-none d-md-none">
-                    <a class="nav-link  ai-icon d-flex align-items-center" href='{% url "products:wishlist" %}'>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-                            <style>svg{fill:#045ffb}</style>
-                            <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
-                        </svg>
-                        <span class="nav-text mx-2">Yoqtirganlarim</span>
-                    </a>
-                </li>
-                <li class="nav-item dropdown notification_dropdown d-lg-none d-md-none">
-                    <a class="nav-link  ai-icon d-flex align-items-center" href='{% url "products:cart" %}'>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><style>svg{fill:#045ffb}</style><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
-                        <span class="nav-text mx-2">Savatcha</span>
-                    </a>
-                </li>
                 </ul>
 			</div>
         </div>
@@ -276,7 +249,7 @@
                 <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Mahsulot Qo'shish</h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Kirish</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>

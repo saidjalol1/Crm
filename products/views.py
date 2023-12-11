@@ -18,6 +18,14 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 
+
+
+
+
+
+
+
+
 class ProductsList(FormView,ListView):
     model = Product
     form_class = ProductAddForm
@@ -29,20 +37,18 @@ class ProductsList(FormView,ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         if 'billur_products' in self.request.GET:
-          
-            queryset = queryset.filter(category__name='Billur')
+            queryset = queryset.filter(category__name='Billur').select_related('category')
         elif 'extra_products' in self.request.GET:
-            
-             queryset = queryset.filter(category__name='Boshqalar')
+            queryset = queryset.filter(category__name='Boshqalar').select_related('category')
         elif 'search' in self.request.GET:
-            queryset = queryset.filter(name__icontains=self.request.GET.get('product'))
+            queryset = queryset.filter(name__icontains=self.request.GET.get('product')).select_related('category')
         return queryset
 
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        wishlist = WishList.objects.get_or_create(session_key=self.request.session.session_key),
+        wishlist = WishList.objects.get_or_create(session_key=self.request.session.session_key)
         title = None
         if 'billur_products' in self.request.path:
             title = 'Billur tovarlar'
@@ -197,6 +203,7 @@ class CardView(View):
         elif 'delete' in request.POST:
             product = CartItems.objects.get(session_key=request.session.session_key,product_id=request.POST.get('product_delete'))
             product.delete()
+            return redirect("/cart_page/")
         elif 'order' in request.POST:
             session_key = request.session.session_key
             cart_items = CartItems.objects.filter(session_key=session_key)

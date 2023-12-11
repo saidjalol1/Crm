@@ -53,10 +53,22 @@
                 </div>
                 <div class="row">
                     <div class='col-lg-12'>
+                        <div class="col-lg-12">
+                            <form action="" method="GET" class="d-flex justify-content-between flex-wrap">
+                                <div class="d-flex">
+                                    <input type="text" placeholder="Nomi bo'yicha izlash" class="form-control" name="name_product">
+                                    <button  type="submit" class="btn btn-primary ml-5" name="by_name">Izlash</button>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-outline-success" name="most_sold">Eng ko'p sotilgan</button>
+                                    <button type="submit" class="btn btn-outline-success" name="most_product">Eng ko'p tovar</button>
+                                </div>
+                            </form>
+                        </div>
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title" style="color: black;font-size: 21px;">Ombor</h4>
-                                <h4 style="font-size: 21px;">Jami : {{ products.overall_products_number }}ta</h4>
+                                <h4 style="font-size: 21px;">Jami : {{ storage.overall_products_number }}ta</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -71,7 +83,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for i in products.products.all %}
+                                            {% for i in products %}
                                             <tr>
                                                 <th style="color: black;font-size: 18px;">{{ i.id }}</th>
                                                 <td style="color: black;font-size: 18px;">{{ i.name }}</td>

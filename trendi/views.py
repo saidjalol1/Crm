@@ -2,7 +2,7 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, TemplateView
-from products.models import Product, ProductCategory, ProductTag
+from products.models import Product, ProductCategory, ProductTag, Aksiyalar_qoshish
 from django.http import HttpResponse
 from main.models import Orders, CartItems, OrderItems, WishList, Packages, PackageItems
 from django.views import View
@@ -20,6 +20,8 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from products.views import add_to_cart
+from django.db.models import Prefetch
+from django.contrib import messages
 # class TrendiView(TemplateView):
 #     template_name = "trendi.html"
 
@@ -30,34 +32,46 @@ class TrendiView(ListView):
     success_url = reverse_lazy('/')
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().select_related('category')
         if 'billur_products' in self.request.GET:
             queryset = queryset.filter(category__name='Billur')
         elif 'extra_products' in self.request.GET:
             queryset = queryset.filter(category__name='Boshqalar')
-        elif 'search' in self.request.GET:
-            queryset = queryset.filter(name__icontains=self.request.GET.get('product'))
+        elif 'filter' in self.request.GET:
+            filter_object = self.request.GET.get("object")
+            filter_by = self.request.GET.get("filter_by")
+            if filter_by == "Eng ko'p sotilgan tovarlar":
+                queryset = queryset.order_by("-sold_amount")
+            else:
+                queryset = queryset.filter(tag__id=int(filter_by))
         return queryset
 
-    def get_context_data(self, **kwargs):
-        wishlist = WishList.objects.get_or_create(session_key=self.request.session.session_key),
-        title = None
-        if 'billur_products' in self.request.path:
+    def get_context_data(self,**kwargs):
+        session_key = self.request.session.session_key
+        wishlist = WishList.objects.get_or_create(session_key=session_key)
+        if 'billur_products' in self.request.GET:
             title = 'Billur tovarlar'
-        elif 'extra-products' in self.request.path:
+        elif 'extra_products' in self.request.GET:
             title = "Boshqalar"
         else:
             title = " "
         print(title)
+        try:
+            cart_items = CartItems.objects.filter(session_key=session_key).select_related('product__category')
+        except CartItems.DoesNotExist:
+            return HttpResponse('<h1>Savatcha Mahsuotlari topilmadi!!! oldin Savatchaga mahsulot qo\'shing</h1>')
         try:
             user = User.objects.get(id=self.request.user.id)
         except User.DoesNotExist:
             user = None
         context = super().get_context_data(**kwargs)
         context.update({
-            'title': title,
-            'wishlist_products':wishlist,
             'user': user,
+            'cart_items_number':len(cart_items),
+            'title':title,
+            'wishlist':wishlist,
+            "tags": ProductTag.objects.all().prefetch_related("products"),
+            'aksiya': Aksiyalar_qoshish.objects.last()
         })
         return context
     def post(self, request, *args, **kwargs):
@@ -73,14 +87,17 @@ class TrendiView(ListView):
 
 class CardView(View):
     template_name ='products/client-cart.html'
-
     def get_context_data(self, request,**kwargs):
+        referring_url = request.META.get('HTTP_REFERER')
         session_key = request.session.session_key
+        
         try:
-            cart_items = CartItems.objects.filter(session_key=session_key)
+            cart_items = CartItems.objects.filter(session_key=session_key).select_related('product__category')
         except CartItems.DoesNotExist:
-            return HttpResponse('<h1>Savatcha Mahsuotlari topilmadi!!! oldin Savatchaga mahsulot qo\'shing</h1>')
+            messages.warning(request,"Mahsulot topilmadi...")
+            return redirect(referring_url)
         kwargs['cart_items'] = cart_items
+        kwargs['cart_items_number'] = len(cart_items)
         kwargs['cart_sum'] = sum([i.overall_price() for i in cart_items])
         return kwargs
 
@@ -106,7 +123,7 @@ class CardView(View):
             product.delete()
         elif 'order' in request.POST:
             session_key = request.session.session_key
-            cart_items = CartItems.objects.filter(session_key=session_key)
+            cart_items = CartItems.objects.filter(session_key=session_key).select_related('product')
             order_amount = sum([i.overall_price() for i in cart_items])
             # print(cart_items)
             if order_amount > 100000:
@@ -128,7 +145,7 @@ class CardView(View):
                         )
                     # print()
                 cart_items.delete()
-                # order_instance.items.set(cart_items)
+                messages.warning(request,"Buyurtmangiz qabul qilindi")
             else: 
                 messages.warning(request, 'Umumiy qiymat 100.000 so\'mni tashkil etganda buyurtma berish mumkin!!!')           
         return render(request, self.template_name, self.get_context_data(request,**ctxt))
@@ -142,7 +159,7 @@ class WishListView(View):
         session_key = self.request.session.session_key
         print(self.request.session.session_key)
         wishlist = WishList.objects.get(session_key=session_key)
-        products = wishlist.products.all()
+        products = wishlist.products.select_related('category').all()
         status = False
         if products:
             status = True
@@ -193,3 +210,48 @@ def add_to_wishlist(request, product_id):
     return JsonResponse({'is_added': is_added})
 
 
+def add_to_card(request, product_id):
+    referring_url = request.META.get('HTTP_REFERER')
+    product = get_object_or_404(Product, id=product_id)
+    session_key = request.session.session_key
+    if 'quantity' in request.POST:
+        quantity = request.POST.get('quantity')
+    
+
+    if not session_key:
+        request.session.save()
+        session_key = request.session.session_key
+
+    
+    try:
+        cart_item = CartItems.objects.get(session_key=session_key, product_id=product.id)
+        quantity = request.POST.get('quantity')
+        if quantity != None:
+            if product.amount == 0 or product.amount < int(quantity):
+               messages.warning(request, f"Mahsulot omborda yetarli emas!!!")
+               
+            messages.warning(request, f"Mahsulot omborga qo'shildi!!!")
+            cart_item.quantity += int(quantity)
+            cart_item.save()
+            
+    except CartItems.DoesNotExist:
+        quantity = request.POST.get('quantity')
+        if quantity:
+            quantity = int(quantity)
+            CartItems.objects.create(
+                product_id=product_id,
+                session_key=session_key,
+            )
+            cart_item = CartItems.objects.get(session_key=session_key, product_id = product_id)
+            cart_item.quantity += quantity
+            cart_item.save()
+            messages.warning(request, f"Mahsulot  omborga qo'shildi")
+        else:
+            cart_item = CartItems.objects.create(
+                product_id=product_id,
+                session_key=session_key,
+            )
+            cart_item.quantity += 1
+            cart_item.save()
+            messages.warning(request, f"Mahsulot  omborga qo'shildi")
+    return redirect(referring_url)

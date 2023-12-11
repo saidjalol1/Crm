@@ -2,6 +2,17 @@ from django.db import models
 from django_resized import ResizedImageField
 
 
+
+class Aksiyalar_qoshish(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to="aksiyalar_rasmlari/")
+    
+    def __str__(self):
+        return str(self.name)
+
+
 class Storage(models.Model):
     name = models.CharField(max_length=250)
     last_updated = models.DateTimeField(auto_now_add=True)
@@ -17,6 +28,7 @@ class Storage(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class ProductCategory(models.Model):
     name = models.CharField(max_length=250)
@@ -34,6 +46,7 @@ class ProductTag(models.Model):
 
     def __str__(self):
         return str(self.name)
+
 
 class Product(models.Model):
     name = models.CharField(max_length=250,verbose_name = "Tovar nomi")
@@ -65,6 +78,7 @@ class Product(models.Model):
     def __str__(self):
         return str(self.name)
     
+
 
 
 

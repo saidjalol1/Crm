@@ -7,13 +7,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 <div class="container">
-    {% if cart_items %}
-    <div class="row d-flex justify-content-center align-items-center h-100 mt-10">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} col-10 mb-4">
+  {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} col-10 mb-4" style="margin: 0 auto;text-align:center;">
           {{ message }}
         </div>
         {% endfor %}
+    {% if cart_items %}
+    <div class="row d-flex justify-content-center align-items-center h-100 mt-10">
+        
       
         <div class="col-10">
           {% if  cart_sum > 100000 %}
@@ -41,7 +42,7 @@
                     {% csrf_token %}
                     <input type="text" name="product" value="{{ i.product.id }}" style="display: none;">
                  
-                        <input id="form1" min="0" name="quantity" value="{{ i.quantity }}" type="number" class="form-control form-control-sm my-2 mx-2" style="font-size: 18px;color: black;width: 50px;"/>
+                        <input id="form1" min="0" name="quantity" value="{{ i.quantity }}" type="number" class="form-control form-control-sm my-2 mx-2" style="font-size: 18px;color: black;width: 70px;"/>
                     
                     
                         <button class="btn btn-primary  px-2  my-2 mx-2" name="add_quantity">Saqlash</button>
@@ -54,8 +55,29 @@
                     <form action="" method="POST" class="d-flex justify-content-center align-items-center mx-4">
                       {% csrf_token %}
                       <input type="text" name="product_delete" value="{{ i.product.id }}" style="display: none;">
-                      <button type="submit" name="delete" class="text-danger outline-none" style="border: none;background-color: transparent;">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 448 512"><style>svg{fill:#808185}</style><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+                      <button type="submit" name="delete" style="border: none;background-color: transparent;cursor:pointer;">
+                        <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	                                 height="1.5em" viewBox="0 0 482.428 482.429"
+	                                xml:space="preserve">
+                          <g>
+	                        <g>
+		                        <path d="M381.163,57.799h-75.094C302.323,25.316,274.686,0,241.214,0c-33.471,0-61.104,25.315-64.85,57.799h-75.098
+			                        c-30.39,0-55.111,24.728-55.111,55.117v2.828c0,23.223,14.46,43.1,34.83,51.199v260.369c0,30.39,24.724,55.117,55.112,55.117
+			                        h210.236c30.389,0,55.111-24.729,55.111-55.117V166.944c20.369-8.1,34.83-27.977,34.83-51.199v-2.828
+			                        C436.274,82.527,411.551,57.799,381.163,57.799z M241.214,26.139c19.037,0,34.927,13.645,38.443,31.66h-76.879
+			                        C206.293,39.783,222.184,26.139,241.214,26.139z M375.305,427.312c0,15.978-13,28.979-28.973,28.979H136.096
+			                        c-15.973,0-28.973-13.002-28.973-28.979V170.861h268.182V427.312z M410.135,115.744c0,15.978-13,28.979-28.973,28.979H101.266
+			                        c-15.973,0-28.973-13.001-28.973-28.979v-2.828c0-15.978,13-28.979,28.973-28.979h279.897c15.973,0,28.973,13.001,28.973,28.979
+			                        V115.744z"/>
+		                        <path d="M171.144,422.863c7.218,0,13.069-5.853,13.069-13.068V262.641c0-7.216-5.852-13.07-13.069-13.07
+			                        c-7.217,0-13.069,5.854-13.069,13.07v147.154C158.074,417.012,163.926,422.863,171.144,422.863z"/>
+		                        <path d="M241.214,422.863c7.218,0,13.07-5.853,13.07-13.068V262.641c0-7.216-5.854-13.07-13.07-13.07
+			                        c-7.217,0-13.069,5.854-13.069,13.07v147.154C228.145,417.012,233.996,422.863,241.214,422.863z"/>
+		                        <path d="M311.284,422.863c7.217,0,13.068-5.853,13.068-13.068V262.641c0-7.216-5.852-13.07-13.068-13.07
+			                        c-7.219,0-13.07,5.854-13.07,13.07v147.154C298.213,417.012,304.067,422.863,311.284,422.863z"/>
+	                          </g>
+                          </g>
+                        </svg>
                       <button>
                     </form>
                   </div>
@@ -69,16 +91,18 @@
         </div>
     </div>
     {% endif %}
-    <div class="d-flex justify-content-end align-items-center">
+    <div class="container">
+      <div class="d-flex justify-content-end align-items-center">
         {% if  cart_sum > 100000 %}
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
             Zakaz berish
         </button>
         {% else %}
-        <button disabled type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        <a href="/"  type="button" class="btn btn-primary">
             Zakaz berish
-        </button>
+        </a>
         {% endif %}
+    </div>
     </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -157,8 +181,6 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-            
-            
 {% endblock content %}
         
 

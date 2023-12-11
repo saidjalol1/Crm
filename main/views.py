@@ -101,7 +101,7 @@ class OrdersView(View):
 
 
     def get_context_data(self, *args, **kwargs):
-        kwargs['orders'] = Orders.objects.all()
+        kwargs['orders'] = Orders.objects.all().prefetch_related("order_items")
         kwargs['driver_add_form'] = DriverForm()
         kwargs['delivers'] = Deliver.objects.all()
         return kwargs
@@ -115,11 +115,11 @@ class OrdersView(View):
             date = request.GET.get('by_date')
             status = request.GET.get('by_status')
             if date and status:
-                context['orders'] = Orders.objects.filter(date_added__date=date, status=status)
+                context['orders'] = Orders.objects.filter(date_added__date=date, status=status).prefetch_related("order_items")
             elif date and not status:
-                context['orders'] = Orders.objects.filter(date_added__date=date)
+                context['orders'] = Orders.objects.filter(date_added__date=date).prefetch_related("order_items")
             elif status and not date:
-                context['orders'] = Orders.objects.filter(status=status)
+                context['orders'] = Orders.objects.filter(status=status).prefetch_related("order_items")
             else:
                 context['orders'] =Orders.objects.all()
         return render(request, self.template_name,context)
@@ -189,7 +189,7 @@ class OrdersStatusView(View):
     template_name = 'products/orders_status.html'
 
     def get_context_data(self,*args,**kwargs):
-        kwargs['orders'] = Orders.objects.all()
+        kwargs['orders'] = Orders.objects.all().prefetch_related("order_items")
         return kwargs
 
     def get(self, request, *args, **kwargs):
@@ -251,13 +251,27 @@ class StorageView(View):
 
 
     def get_context_data(self,**kwargs):
-        kwargs['products'] = Storage.objects.get(id=1)
-        print(kwargs['products'].overall_products_number())
+        storage = Storage.objects.get(id=1)
+        kwargs['products'] = storage.products.all()
+        kwargs['storage'] = storage 
         return kwargs
     
 
     def get(self, request, *args, **kwargs):
-        return render(request,self.template_name,self.get_context_data())
+        context = self.get_context_data()
+        if "by_name" in request.GET:
+            storage = Storage.objects.get(id=1)
+            context['products'] = storage.products.filter(name__icontains=request.GET.get("name_product"))
+            return render(request,self.template_name,context)
+        elif "most_sold" in request.GET:
+            storage = Storage.objects.get(id=1)
+            context["products"] = storage.products.all().order_by("-sold_amount")
+            return render(request,self.template_name,context)
+        elif "most_product" in request.GET:
+            storage = Storage.objects.get(id=1)
+            context["products"] = storage.products.all().order_by("-amount")
+            return render(request,self.template_name,context)
+        return render(request,self.template_name,context)
 
 
     def post(self, request,*args,**kwargs):
