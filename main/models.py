@@ -86,7 +86,7 @@ class WishList(models.Model):
     def __str__(self):
         return str(self.date_added)
     
-
+    
 class Expenses(models.Model):
     name = models.CharField(max_length=250)
     amount = models.BigIntegerField(default=0)
